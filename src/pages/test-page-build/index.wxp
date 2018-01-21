@@ -1,0 +1,25 @@
+<template>
+<view>sdsds</view>
+</template>
+
+<script lang="js">
+var app = getApp();
+
+Page(app.definePage([], {
+    data: {}
+}))
+</script>
+
+
+<style lang="scss">
+@import "../../../vendor/aui/sass/index";
+
+@debug mixin-exists("f-gen-size");
+
+.test {
+    width: 10px;
+    a {
+        w: 1
+    }
+}
+</style>
