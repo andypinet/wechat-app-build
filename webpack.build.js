@@ -55,7 +55,7 @@ watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath)
                 let destroot = projectconfig.config.destroot + destfolder;
                 if (filecontent) {
                     console.log(chalk.cyan("build package " + filepath));
-                    const myScriptContents = vueParser.parse(filecontent, 'script', { lang: ['js'] })
+                    let myScriptContents = vueParser.parse(filecontent, 'script', { lang: ['js'] })
                     console.log(myScriptContents);
                     myScriptContents = myScriptContents.replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '').trim();
                     fse.outputFileSync(path.join(destroot, "/index.js"), myScriptContents);
