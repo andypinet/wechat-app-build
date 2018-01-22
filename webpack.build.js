@@ -5,6 +5,7 @@ const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs')
 const fse = require('fs-extra')
+const exec = require('child_process').exec;
 const vueParser = require('vue-parser')
 const packageImporter = require('node-sass-package-importer');
 const sass = require('node-sass');
@@ -38,6 +39,15 @@ spinner.start()
 //     }))
 // }
 
+function compile(filename, filepath, destpath) {
+    return new Promise(function (resolve, reject) {
+        exec(`npx babel ${filepath} --out-file ${destpath}`, function (err, stdout, stderr) {
+            if (err) throw err
+            resolve();
+        })
+    })
+}
+
 watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath) {
     let paths = filepath.split(path.sep);
     let filename = paths[paths.length - 1];
@@ -46,38 +56,43 @@ watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath)
             return false
         }
         return true;
-    }).join("/");
+    }).join(path.sep);
     if (filepath.indexOf("___jb_") < 0) {
         if (filename.indexOf("wxc") > -1 || filename.indexOf("wxp") > -1) {
             let destfolder = folder.replace(projectconfig.config.workspaceroot, "");
+            let packagename = paths[paths.length - 2];
             try {
                 let filecontent = utils.readFile(filepath).toString();
                 let destroot = projectconfig.config.destroot + destfolder;
                 if (filecontent) {
                     console.log(chalk.cyan("build package " + filepath));
                     let myScriptContents = vueParser.parse(filecontent, 'script', { lang: ['js'] })
-                    console.log(myScriptContents);
                     myScriptContents = myScriptContents.replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '').trim();
-                    fse.outputFileSync(path.join(destroot, "/index.js"), myScriptContents);
+                    let tmppath = path.join(folder, `../../tmp/${packagename}/index.js`);
 
-                    const myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim()
-                    const compiledStyle = sass.renderSync({
-                        data: myStyleContents,
-                        importer: packageImporter({}),
-                        includePaths: [
-                            folder
-                        ],
-                        functions: {
-                        }
-                    }).css;
+                    fse.outputFileSync(tmppath, myScriptContents);
 
-                    fse.outputFileSync(path.join(destroot, "/index.wxss"), compiledStyle);
+                    compile(filename.replace(/.wxp$/, ""), tmppath, path.join(projectconfig.config.destroot, `/pages/${packagename}/index.js`)).then(function () {
+                        const myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim()
+                        const compiledStyle = sass.renderSync({
+                            data: myStyleContents,
+                            importer: packageImporter({}),
+                            includePaths: [
+                                folder
+                            ],
+                            functions: {
+                            }
+                        }).css;
 
-                    const myTemplateContents = vueParser.parse(filecontent, 'template', {}).replace('//////////', '').trim()
+                        fse.outputFileSync(path.join(destroot, "/index.wxss"), compiledStyle);
 
-                    fse.outputFileSync(path.join(destroot, "/index.wxml"), myTemplateContents);
+                        const myTemplateContents = vueParser.parse(filecontent, 'template', {}).replace('//////////', '').trim()
 
-                    fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
+                        fse.outputFileSync(path.join(destroot, "/index.wxml"), myTemplateContents);
+
+                        fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
+                    })
+
                 }
             } catch (e) {
 

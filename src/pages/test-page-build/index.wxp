@@ -1,16 +1,16 @@
 <template>
-<view>sdsds</view>
+<view>测试文</view>
 </template>
 
 <script lang="js">
-var app = getApp();
+    function a(x = 1) {
 
+    }
+var app = getApp();
 Page(app.definePage([], {
     data: {}
 }))
 </script>
-
-
 <style lang="scss">
 @import "../../../vendor/aui/sass/index";
 
@@ -18,7 +18,7 @@ Page(app.definePage([], {
 
 .test {
     width: 10px;
-    a {
+    .subsel {
         w: 1
     }
 }
