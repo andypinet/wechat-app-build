@@ -14,7 +14,7 @@ const webpack = require('webpack')
 const projectconfig = require("./webpack.conf");
 
 
-let utils = {
+const utils = {
     readFile: function (path) {
         try {
             return fs.readFileSync(path);
@@ -24,8 +24,10 @@ let utils = {
     }
 };
 
-let spinner = ora('building for production... ')
+const spinner = ora('building for production... ')
 spinner.start()
+
+const TMPFOLDERNAME = "tmp";
 
 // if (argv.watch) {
 //     projectconfig.webpackconfig.watch = true;
@@ -61,6 +63,7 @@ watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath)
         if (filename.indexOf("wxc") > -1 || filename.indexOf("wxp") > -1) {
             let destfolder = folder.replace(projectconfig.config.workspaceroot, "");
             let packagename = paths[paths.length - 2];
+            let tmpfolder = paths.slice(paths.length - 3, paths.length - 1).join(path.sep);
             try {
                 let filecontent = utils.readFile(filepath).toString();
                 let destroot = projectconfig.config.destroot + destfolder;
@@ -68,7 +71,7 @@ watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath)
                     console.log(chalk.cyan("build package " + filepath));
                     let myScriptContents = vueParser.parse(filecontent, 'script', { lang: ['js'] })
                     myScriptContents = myScriptContents.replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '').trim();
-                    let tmppath = path.join(folder, `../../../tmp/${packagename}/index.js`);
+                    let tmppath = path.join(folder, `../../../${TMPFOLDERNAME}/${tmpfolder}/index.js`);
 
                     fse.outputFileSync(tmppath, myScriptContents);
 

@@ -3,9 +3,8 @@
 </template>
 
 <script lang="js">
-    function a(x = 1) {
-
-    }
+function a(x = 1) {
+}
 var app = getApp();
 Page(app.definePage([], {
     data: {}
