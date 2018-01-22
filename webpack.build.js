@@ -50,7 +50,7 @@ function compile(filename, filepath, destpath) {
     })
 }
 
-watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath) {
+function handleVue(evt, filepath) {
     let paths = filepath.split(path.sep);
     let filename = paths[paths.length - 1];
     let folder = paths.filter(function (v, index) {
@@ -66,16 +66,30 @@ watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath)
             let tmpfolder = paths.slice(paths.length - 3, paths.length - 1).join(path.sep);
             try {
                 let filecontent = utils.readFile(filepath).toString();
-                let destroot = projectconfig.config.destroot + destfolder;
+                let destroot = path.join(projectconfig.config.destroot, destfolder);
                 if (filecontent) {
                     console.log(chalk.cyan("build package " + filepath));
+
+                    // 确保目录存在
+                    fse.emptyDirSync(destroot);
+
                     let myScriptContents = vueParser.parse(filecontent, 'script', { lang: ['js'] })
                     myScriptContents = myScriptContents.replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '').trim();
                     let tmppath = path.join(folder, `../../../${TMPFOLDERNAME}/${tmpfolder}/index.js`);
 
                     fse.outputFileSync(tmppath, myScriptContents);
 
-                    compile(filename.replace(/.wxp$/, ""), tmppath, path.join(projectconfig.config.destroot, `/pages/${packagename}/index.js`)).then(function () {
+                    let filebasename = "";
+                    if (filename.indexOf("wxc") > -1) {
+                        filebasename = filename.replace(/.wxc$/, "")
+                    } else {
+                        filebasename = filename.replace(/.wxp$/, "")
+                    }
+
+                    // 先确保有文件
+                    fse.ensureFileSync(path.join(projectconfig.config.destroot, `/${tmpfolder}/index.js`));
+
+                    compile(filebasename, tmppath, path.join(projectconfig.config.destroot, `/${tmpfolder}/index.js`)).then(function () {
                         const myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim()
                         const compiledStyle = sass.renderSync({
                             data: myStyleContents,
@@ -102,4 +116,6 @@ watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath)
             }
         }
     }
-});
+}
+
+watch(projectconfig.config.wxproot, { recursive: true }, handleVue);
