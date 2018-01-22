@@ -68,7 +68,7 @@ watch(projectconfig.config.wxproot, { recursive: true }, function(evt, filepath)
                     console.log(chalk.cyan("build package " + filepath));
                     let myScriptContents = vueParser.parse(filecontent, 'script', { lang: ['js'] })
                     myScriptContents = myScriptContents.replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '').trim();
-                    let tmppath = path.join(folder, `../../tmp/${packagename}/index.js`);
+                    let tmppath = path.join(folder, `../../../tmp/${packagename}/index.js`);
 
                     fse.outputFileSync(tmppath, myScriptContents);
 
