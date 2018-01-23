@@ -13,7 +13,6 @@ data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAYAAAB4sfmlAAAAAXNSR0IArs
 `;
 
 
-
 let cdnserver = "http://img.auntec.cn/gsxxcx/images/";
 
 function assets(path, base = cdnserver) {
