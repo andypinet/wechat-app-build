@@ -9,9 +9,34 @@
 5. scoped css
 6. template
 
-### 求工作 
+### 演示
 
-1585638808@qq.com
+支持使用vue的写法
+
+index.wxc
+
+```vue
+<template>
+    <view class="test-c-a">组件a</view>
+</template>
+
+<script lang="js">
+    export default {
+        data() {
+
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+    .test-c-a {
+        color: blue;
+    }
+</style>
+```
+
+index.js可以使用template/wxc.js改变
+
 
 ### 安装 
 
