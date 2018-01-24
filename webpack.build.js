@@ -361,7 +361,7 @@ function handleWeb(evt, filepath) {
                                                 return $1 + $2.replace("view", "aux-view");
                                             });
 
-                                            let webapp = webtemplate(path.join(__dirname, "./template/web.js"), result.css, ret.template, compilejs, 'app-main', "//@endweb");
+                                            let webapp = webtemplate(path.join(__dirname, "./template/wec.js"), result.css, ret.template, compilejs, paths[paths.length - 2], "//@endweb");
 
                                             fse.outputFileSync(path.join(destroot, "/index.js"), webapp);
                                         });

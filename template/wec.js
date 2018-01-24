@@ -14,5 +14,6 @@
         $is,
         template: template
     }, js.default)));
+    aui.dom.addStyle($is, css);
 @{after}
 })()

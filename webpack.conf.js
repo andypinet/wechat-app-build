@@ -3,13 +3,14 @@ const path = require('path');
 var isWin = /^win/.test(process.platform);
 
 let config = {};
-// config.target = "web";
+config.target = "web";
 config.workspaceroot = path.join(__dirname, "src");
 config.wxproot = path.join(config.workspaceroot);
 if (isWin) {
 
 } else {
-    config.destroot =  path.join(__dirname, "./dist");
+    // config.destroot =  path.join(__dirname, "./dist");
+    config.destroot =  path.join(__dirname, "../test-web");
 }
 
 module.exports = {
