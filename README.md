@@ -7,6 +7,7 @@
 3. sass support
 4. postcss support
 5. scoped css
+6. template
 
 ### 求工作 
 
