@@ -5,6 +5,8 @@
 1. lazy compile 
 2. babel support
 3. sass support
+4. postcss support
+5. scoped css
 
 ### 求工作 
 
