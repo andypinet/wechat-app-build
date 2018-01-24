@@ -17,13 +17,15 @@ index.wxc
 
 ```vue
 <template>
-    <view class="test-c-a">组件a</view>
+    <view class="test-c-a">{{message}}</view>
 </template>
 
 <script lang="js">
     export default {
         data() {
-
+            return {
+                message: "组件a"
+            }
         }
     }
 </script>
