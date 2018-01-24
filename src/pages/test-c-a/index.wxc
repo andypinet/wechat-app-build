@@ -1,15 +1,15 @@
 <template>
-    <view>组件a</view>
+    <view class="test-c-a">组件a</view>
 </template>
 
 <script lang="js">
     Component({})
+
+
 </script>
-<style lang="scss">
-    .test {
-        width: 10px;
-        .subsel {
-            w: 1
-        }
+
+<style lang="scss" scoped>
+    .test-c-a {
+        color: blue;
     }
 </style>

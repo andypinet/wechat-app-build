@@ -9,6 +9,8 @@ const exec = require('child_process').exec;
 const vueParser = require('vue-parser')
 const packageImporter = require('node-sass-package-importer');
 const sass = require('node-sass');
+const postcss = require('postcss');
+const cssmodules = require('postcss-icss-selectors')
 const watch = require('node-watch')
 const Cacheman = require('cacheman');
 const webpack = require('webpack')
@@ -122,13 +124,16 @@ function handleVue(evt, filepath) {
                     // 先确保有文件
                     fse.ensureFileSync(path.join(projectconfig.config.destroot, `/${tmpfolder}/index.js`));
 
+                    let scopedcss = {};
+
                     compile(filebasename, tmppath, tmpcompilepath).then(function () {
                         fse.copySync(tmpcompilepath, destscriptpath);
 
+                        scopedcss = {};
+
                         const myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim()
                         diffchange(path.join(folder, "/index.wxss"), Buffer.from(myStyleContents), xmlcache).then(function (isChange) {
-                            console.log(isChange);
-                            if (isChange === 'change') {
+                            if (isChange !== 'unchange') {
                                 const compiledStyle = sass.renderSync({
                                     data: myStyleContents,
                                     importer: packageImporter({}),
@@ -138,21 +143,61 @@ function handleVue(evt, filepath) {
                                     functions: {
                                     }
                                 });
-                                if (compiledStyle) {
-                                    fse.outputFileSync(path.join(destroot, "/index.wxss"), compiledStyle.css);
+
+                                let exportcss = /(:export[\s]*{)([^}]*)(})/g;
+
+                                let isscoped = false;
+                                if (/<style.*scoped>/g.test(filecontent)) {
+                                    isscoped = true;
+                                } else {
+
                                 }
+
+                                let postcssmodules = [];
+
+                                if (isscoped) {
+                                    postcssmodules.push(cssmodules({}))
+                                }
+
+
+                                postcss(postcssmodules)
+                                    .process(compiledStyle.css)
+                                    .then(result => {
+                                        if (isscoped) {
+                                            result.css.replace(exportcss, function (match, $1, $2, $3) {
+                                                $2.trim().split(";").forEach(function (v) {
+                                                    let s = v.trim().split(":");
+                                                    if (s.length > 1) {
+                                                        scopedcss[s[0].trim()] = s[1].trim();
+                                                    }
+                                                })
+                                            });
+
+                                            result.css = result.css.replace(exportcss, "");
+                                        }
+
+                                        let myTemplateContents = vueParser.parse(filecontent, 'template', {}).replace('//////////', '').trim()
+                                        diffchange(path.join(folder, "/index.wxml"), Buffer.from(myTemplateContents), xmlcache).then(function (isChange) {
+                                            if (isChange === 'change') {
+                                            }
+
+                                            if (isscoped) {
+                                                for (let key in scopedcss) {
+                                                    myTemplateContents = myTemplateContents.replace(new RegExp(`class="${key}`, 'g'), 'class="'+scopedcss[key]);
+                                                }
+                                            }
+
+                                            fse.outputFileSync(path.join(destroot, "/index.wxml"), myTemplateContents);
+                                        });
+
+
+                                        fse.outputFileSync(path.join(destroot, "/index.wxss"), result.css);
+                                    });
+
                             }
                         });
 
 
-                        const myTemplateContents = vueParser.parse(filecontent, 'template', {}).replace('//////////', '').trim()
-                        diffchange(path.join(folder, "/index.wxml"), Buffer.from(myTemplateContents), xmlcache).then(function (isChange) {
-                            if (isChange === 'change') {
-                                fse.outputFileSync(path.join(destroot, "/index.wxml"), myTemplateContents);
-                            }
-                        });
-
-                        
                         diffchange(path.join(folder, "/index.json"), fs.readFileSync(path.join(folder, "/index.json")), otscache).then(function (isChange) {
                             if (isChange === 'change') {
                                 fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
