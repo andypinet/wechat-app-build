@@ -7,27 +7,28 @@
     <test-c-a></test-c-a>
 </template>
 
-
 <script lang="js">
 let cdnserver = "http://img.auntec.cn/gsxxcx/images/";
 
 function assets(path, base = cdnserver) {
     return base + path + "?v=" + Date.now();
 }
-
-
 let app = getApp();
-Page(app.definePage([], {
-    data: {
-        state: "unload",
-        src: assets("banner1.png")
+
+export default {
+    behaviors: [],
+    data() {
+        return {
+            state: "unload",
+            src: assets("banner1.png")
+        }
     },
     onBindLoad() {
         this.setData({
             state: "loaded"
         })
     }
-}))
+};
 </script>
 
 <style lang="scss">
