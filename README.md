@@ -37,7 +37,7 @@ index.wxc
 </style>
 ```
 
-index.js可以使用template/wxc.js改变
+生成的js文件可以使用template/wxc.js改变
 
 
 ### 安装 
