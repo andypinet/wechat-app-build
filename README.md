@@ -52,6 +52,55 @@ index.wxc
 </style>
 ```
 
+compiled
+
+index.wxml
+
+```html
+<view class="file__test-c-a---196Pr {{message + 1}} {{message + 2}} ">
+  <text>test-c-a</text>
+  <text wx:for="{{items}}">{{item}}</text>
+  <text wx:for="{{items}}" wx:for-item="{{item}}">{{item}}</text>
+  <text wx:for="{{items}}" wx:for-item="{{item}}" wx:for-index="{{key}}">{{item}}</text>
+  <text wx:if="{{show}}">if</text>
+
+  <button>button</button>
+</view>
+```
+
+index.wxss
+
+```css
+.file__test-c-a---196Pr {
+  color: blue; }
+```
+
+index.js
+
+```javascript
+let js = {};
+(function (exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    data: function data() {
+        return {
+            message: "组件a",
+            show: true,
+            items: [1, 2]
+        };
+    }
+};
+
+})(js);
+let component = js.default;
+component.data = js.default.data();
+Component(component)
+```
+
 1. 支持微信属性简写
 2. template里使用组件名常量 #{$IS}
 3. scss里使用组件名常量 $IS
