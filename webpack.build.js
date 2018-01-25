@@ -10,7 +10,9 @@ const vueParser = require('vue-parser')
 const packageImporter = require('node-sass-package-importer');
 const sass = require('node-sass');
 const postcss = require('postcss');
+const pretty = require('pretty');
 const cssmodules = require('postcss-icss-selectors')
+const v = require('voca');
 const watch = require('node-watch')
 const Cacheman = require('cacheman');
 const webpack = require('webpack')
@@ -80,6 +82,34 @@ function compile(filename, filepath, destpath, options = {}) {
     })
 }
 
+function attributeToWxAttribute(str) {
+    return str.split('"').map(function (a, index) {
+        if (index === 1) {
+            return `{{${a}}}`;
+        }
+        return a;
+    }).join('"');
+}
+
+
+function traux(template, isWx = true) {
+    let ret = template.replace(/(<[\w-]+[\s]+)(\w+=".+")([^>]*>)/g, function (match, $1, $2, $3) {
+        let s = $2.match(/(b:[\w]+="([^"]+)")+/g);
+
+        s.forEach(function (v) {
+            let f = v;
+            if (isWx) {
+                f = f.replace("b:", '');
+                f = attributeToWxAttribute(f);
+            }
+            $2 = $2.replace(v, f);
+        });
+
+        return $1 + $2 + $3;
+    });
+    return pretty(ret);
+}
+
 let wxptemplate = function (path, js, after = "") {
     return fs.readFileSync(path).toString().replace('@{js}', js).replace('@{after}', after);
 };
@@ -130,6 +160,14 @@ function handleVue(evt, filepath) {
 
                     let scopedcss = {};
 
+                    let ret = {};
+                    ret.$is = paths[paths.length - 2];
+
+                    let constants = {
+                        '#{$IS}': ret.$is
+                    };
+
+
                     compile(filebasename, tmppath, tmpcompilepath).then(function () {
                         // fse.copySync(tmpcompilepath, destscriptpath);
 
@@ -146,7 +184,12 @@ function handleVue(evt, filepath) {
                         
                         scopedcss = {};
 
-                        const myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim()
+                        let myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim();
+
+                        myStyleContents = `
+                            $IS: ${ret.$is};
+                        ` + myStyleContents;
+
                         diffchange(path.join(folder, "/index.wxss"), Buffer.from(myStyleContents), xmlcache).then(function (isChange) {
                             if (isChange !== 'unchange') {
                                 const compiledStyle = sass.renderSync({
@@ -192,6 +235,11 @@ function handleVue(evt, filepath) {
                                         }
 
                                         let myTemplateContents = vueParser.parse(filecontent, 'template', {}).replace('//////////', '').trim()
+
+                                        myTemplateContents = v.tr(myTemplateContents, constants);
+
+                                        myTemplateContents = traux(myTemplateContents);
+
                                         diffchange(path.join(folder, "/index.wxml"), Buffer.from(myTemplateContents), xmlcache).then(function (isChange) {
                                             if (isChange === 'change') {
                                             }
@@ -281,6 +329,9 @@ function handleWeb(evt, filepath) {
 
                     let scopedcss = {};
 
+                    let ret = {};
+                    ret.$is = paths[paths.length - 2];
+
                     compile(filebasename, tmppath, tmpcompilepath).then(function () {
                         // fse.copySync(tmpcompilepath, destscriptpath);
 
@@ -288,7 +339,16 @@ function handleWeb(evt, filepath) {
 
                         scopedcss = {};
 
-                        const myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim()
+                        let myStyleContents = vueParser.parse(filecontent, 'style', { lang: ['scss'] }).replace('tslint:enable', '').replace('tslint:disable', '').trim()
+
+                        let constants = {
+                            '#{$IS}': ret.$is
+                        };
+
+                        myStyleContents = `
+                            $IS: ${ret.$is};
+                        ` + myStyleContents;
+
                         diffchange(path.join(folder, "/index.wxss"), Buffer.from(myStyleContents), xmlcache).then(function (isChange) {
                             if (isChange !== 'unchange') {
                                 const compiledStyle = sass.renderSync({
@@ -334,6 +394,9 @@ function handleWeb(evt, filepath) {
                                         }
 
                                         let myTemplateContents = vueParser.parse(filecontent, 'template', {}).replace('//////////', '').trim()
+
+                                        myTemplateContents = v.tr(myTemplateContents, constants);
+
                                         diffchange(path.join(folder, "/index.wxml"), Buffer.from(myTemplateContents), xmlcache).then(function (isChange) {
                                             if (isChange === 'change') {
                                             }
@@ -346,7 +409,6 @@ function handleWeb(evt, filepath) {
 
                                             // fse.outputFileSync(path.join(destroot, "/index.wxml"), myTemplateContents);
 
-                                            let ret = {};
                                             ret.template = myTemplateContents;
                                             ret.template = ret.template.replace(/(<view)([^>])(@:if=")([^"]*)(">)/g, function(match, $1, $2, $3, $4, $5){
                                                 return $1 + $2 + $3.replace("@:if", "v-if") + $4 + $5;
@@ -354,14 +416,22 @@ function handleWeb(evt, filepath) {
                                             ret.template = ret.template.replace(/(<view)([^>])(@:for=")([^"]*)(">)/g, function(match, $1, $2, $3, $4, $5){
                                                 return $1 + $2 + $3.replace("@:for", "v-for") + $4 + $5;
                                             });
+                                            // 处理view
                                             ret.template = ret.template.replace(/(<view)([^>]*)>/g, function(match, $1, $2, $3){
                                                 return $1.replace("view", "aux-view") + $2 + ">" ;
                                             });
                                             ret.template = ret.template.replace(/(<\/[\s]*)(view>)/g, function(match, $1, $2, $3){
                                                 return $1 + $2.replace("view", "aux-view");
                                             });
+                                            // 处理text
+                                            ret.template = ret.template.replace(/(<text)([^>]*)>/g, function(match, $1, $2, $3){
+                                                return $1.replace("text", "aux-text") + $2 + ">" ;
+                                            });
+                                            ret.template = ret.template.replace(/(<\/[\s]*)(text>)/g, function(match, $1, $2, $3){
+                                                return $1 + $2.replace("text", "aux-text");
+                                            });
 
-                                            let webapp = webtemplate(path.join(__dirname, "./template/wec.js"), result.css, ret.template, compilejs, paths[paths.length - 2], "//@endweb");
+                                            let webapp = webtemplate(path.join(__dirname, "./template/wec.js"), result.css, ret.template, compilejs, ret.$is, "//@endweb");
 
                                             fse.outputFileSync(path.join(destroot, "/index.js"), webapp);
                                         });

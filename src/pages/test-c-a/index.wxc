@@ -1,5 +1,9 @@
 <template>
-    <view class="test-c-a">{{message}}</view>
+    <view class="#{$IS}" b:s="message + 1" native="{{message}}">
+        <text>#{$IS}</text>
+        <text>{{message}}</text>
+        <button>button</button>
+    </view>
 </template>
 
 <script lang="js">
@@ -13,7 +17,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .test-c-a {
+    .#{$IS} {
         color: blue;
     }
 </style>

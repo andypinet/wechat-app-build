@@ -10,6 +10,7 @@
     @{js}
     })(js);
     let $is = '@{is}';
+    let $IS = $is;
     Component(defineComponent(Object.assign({
         $is,
         template: template

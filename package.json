@@ -33,8 +33,10 @@
     "postcss": "^6.0.16",
     "postcss-icss-selectors": "^2.0.3",
     "postcss-js": "^1.0.1",
+    "pretty": "^2.0.0",
     "rm": "^0.1.8",
     "sassy-lists": "^3.0.1",
+    "voca": "^1.4.0",
     "vue-parser": "^1.1.6",
     "webpack": "^3.10.0",
     "yargs": "^10.1.1"

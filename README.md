@@ -17,7 +17,11 @@ index.wxc
 
 ```vue
 <template>
-    <view class="test-c-a">{{message}}</view>
+    <view class="#{$IS}" b:s="message + 1" native="{{message}}">
+        <text>#{$IS}</text>
+        <text>{{message}}</text>
+        <button>button</button>
+    </view>
 </template>
 
 <script lang="js">
@@ -31,11 +35,15 @@ index.wxc
 </script>
 
 <style lang="scss" scoped>
-    .test-c-a {
+    .#{$IS} {
         color: blue;
     }
 </style>
 ```
+
+1. 支持b:前缀可以不使用括号
+2. template里使用组件名常量 #{$IS}
+3. scss里使用组件名常量 $IS
 
 生成的js文件可以使用template/wxc.js改变
 
