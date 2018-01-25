@@ -26,7 +26,7 @@ index.wxc
         <text @:for="item in items">{{item}}</text>
         <text @:for="(item,key) in items">{{item}}</text>
         <text @:if="show">if</text>
-        <button>button</button>
+        <button @on:tap="onTaped">button</button>
     </view>
 </template>
 
@@ -63,8 +63,7 @@ index.wxml
   <text wx:for="{{items}}" wx:for-item="{{item}}">{{item}}</text>
   <text wx:for="{{items}}" wx:for-item="{{item}}" wx:for-index="{{key}}">{{item}}</text>
   <text wx:if="{{show}}">if</text>
-
-  <button>button</button>
+  <button bind:tap="onTaped">button</button>
 </view>
 ```
 

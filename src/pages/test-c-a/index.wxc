@@ -5,7 +5,7 @@
         <text @:for="item in items">{{item}}</text>
         <text @:for="(item,key) in items">{{item}}</text>
         <text @:if="show">if</text>
-        <button>button</button>
+        <button @on:tap="onTaped">button</button>
     </view>
 </template>
 
@@ -19,6 +19,11 @@
                     1,
                     2
                 ]
+            }
+        },
+        methods: {
+            onTaped() {
+
             }
         }
     }

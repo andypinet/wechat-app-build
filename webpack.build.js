@@ -148,6 +148,11 @@ function traux(template, isWx = true) {
 
             return "";
         });
+
+        s = s.replace(/(@on:[\w]+=")([^"]+)(")/g, function (match, $2_1, $2_2, $2_3) {
+            // 所有以@:开头的
+            return $2_1.replace("@on:", "bind:") + $2_2 + $2_3;
+        });
         return $1 + s + $3;
     });
     return pretty(ret);
