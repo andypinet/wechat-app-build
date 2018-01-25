@@ -17,7 +17,7 @@ index.wxc
 
 ```vue
 <template>
-    <view class="#{$IS}" b:s="message + 1" native="{{message}}">
+    <view b:class="#{$IS}; {message + 1}; {message + 2};" >
         <text>#{$IS}</text>
         <text>{{message}}</text>
         <button>button</button>

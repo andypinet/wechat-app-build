@@ -13,6 +13,7 @@ const postcss = require('postcss');
 const pretty = require('pretty');
 const cssmodules = require('postcss-icss-selectors')
 const v = require('voca');
+const jsdom = require("jsdom");
 const watch = require('node-watch')
 const Cacheman = require('cacheman');
 const webpack = require('webpack')
@@ -85,7 +86,12 @@ function compile(filename, filepath, destpath, options = {}) {
 function attributeToWxAttribute(str) {
     return str.split('"').map(function (a, index) {
         if (index === 1) {
-            return `{{${a}}}`;
+            return a.split(";").map(function (v) {
+                if (v && v.startWith("{") && v.endsWith("}")) {
+                    return `{{${v}}}`;
+                }
+                return '';
+            }).join(" ");
         }
         return a;
     }).join('"');
@@ -93,19 +99,19 @@ function attributeToWxAttribute(str) {
 
 
 function traux(template, isWx = true) {
-    let ret = template.replace(/(<[\w-]+[\s]+)(\w+=".+")([^>]*>)/g, function (match, $1, $2, $3) {
-        let s = $2.match(/(b:[\w]+="([^"]+)")+/g);
+    let ret = template.replace(/(<[\w-]+[\s]+)([\w:]+=".+")([^>]*>)/g, function (match, $1, $2, $3) {
+        let s = $2.replace(/(b:[\w]+=")([^"]+)(")/g, function (match, $1, $2, $3) {
+            // 所有以b:开头的
+            $2 = $2.split(";").map(function (v) {
+                if (v && v.trim().startsWith("{") && v.trim().endsWith("}")) {
+                    return `{${v.trim()}}`;
+                }
+                return v;
+            }).join(" ");
 
-        s.forEach(function (v) {
-            let f = v;
-            if (isWx) {
-                f = f.replace("b:", '');
-                f = attributeToWxAttribute(f);
-            }
-            $2 = $2.replace(v, f);
+            return $1.replace("b:", "") + $2 + $3;
         });
-
-        return $1 + $2 + $3;
+        return $1 + s + $3;
     });
     return pretty(ret);
 }

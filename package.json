@@ -26,6 +26,7 @@
     "cacheman": "^2.2.1",
     "chalk": "^2.3.0",
     "fs-extra": "^5.0.0",
+    "jsdom": "^11.6.1",
     "node-sass": "^4.7.2",
     "node-sass-package-importer": "^5.1.0",
     "node-watch": "^0.5.5",
