@@ -62,11 +62,4 @@ $base64image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAYAAAB4sfm
     opacity: 0;
     z-index: -1;
 }
-
-
-/*.auc-image {*/
-    /*&.custom-style {*/
-        /*width: 100%;*/
-    /*}*/
-/*}*/
 </style>
