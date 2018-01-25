@@ -22,7 +22,10 @@ index.wxc
 <template>
     <view b:class="#{$IS}; {message + 1}; {message + 2};" >
         <text>#{$IS}</text>
-        <text>{{message}}</text>
+        <text @:for="items">{{item}}</text>
+        <text @:for="item in items">{{item}}</text>
+        <text @:for="(item,key) in items">{{item}}</text>
+        <text @:if="show">if</text>
         <button>button</button>
     </view>
 </template>
@@ -31,7 +34,12 @@ index.wxc
     export default {
         data() {
             return {
-                message: "组件a"
+                message: "组件a",
+                show: true,
+                items: [
+                    1,
+                    2
+                ]
             }
         }
     }
@@ -44,7 +52,7 @@ index.wxc
 </style>
 ```
 
-1. 支持b:前缀可以不使用括号
+1. 支持微信属性简写
 2. template里使用组件名常量 #{$IS}
 3. scss里使用组件名常量 $IS
 

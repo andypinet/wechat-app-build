@@ -1,7 +1,10 @@
 <template>
     <view b:class="#{$IS}; {message + 1}; {message + 2};" >
         <text>#{$IS}</text>
-        <text>{{message}}</text>
+        <text @:for="items">{{item}}</text>
+        <text @:for="item in items">{{item}}</text>
+        <text @:for="(item,key) in items">{{item}}</text>
+        <text @:if="show">if</text>
         <button>button</button>
     </view>
 </template>
@@ -10,7 +13,12 @@
     export default {
         data() {
             return {
-                message: "组件a"
+                message: "组件a",
+                show: true,
+                items: [
+                    1,
+                    2
+                ]
             }
         }
     }

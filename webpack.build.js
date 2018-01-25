@@ -87,10 +87,7 @@ function attributeToWxAttribute(str) {
     return str.split('"').map(function (a, index) {
         if (index === 1) {
             return a.split(";").map(function (v) {
-                if (v && v.startWith("{") && v.endsWith("}")) {
-                    return `{{${v}}}`;
-                }
-                return '';
+                return `{{${v}}}`;
             }).join(" ");
         }
         return a;
@@ -98,8 +95,33 @@ function attributeToWxAttribute(str) {
 }
 
 
+function handleArrayDirective(exp) {
+    let attr = "";
+    let arr = exp.split("in");
+    if (arr && arr.length > 1) {
+        let left = arr[0].trim();
+        let right = arr[1].trim();
+        let s = left.split(",");
+        attr = attr + `wx:for="{{${right}}}"`;
+        if (s.length === 1) {
+            attr = attr + ` wx:for-item="{{${s[0].trim()}}}"`;
+        }
+
+        if (s.length === 2) {
+            let f = s.join().split('(')[1].split(')')[0].split(",");
+            attr = attr + ` wx:for-item="{{${f[0].trim()}}}"`;
+            attr = attr + ` wx:for-index="{{${f[1].trim()}}}"`;
+        }
+    }
+
+    if (arr && arr.length === 1) {
+        attr = attr + `wx:for="{{${exp.trim()}}}"`;
+    }
+    return attr;
+}
+
 function traux(template, isWx = true) {
-    let ret = template.replace(/(<[\w-]+[\s]+)([\w:]+=".+")([^>]*>)/g, function (match, $1, $2, $3) {
+    let ret = template.replace(/(<[\w-]+[\s]+)([@\w:\s]+=[\s]*".+")([^>]*>)/g, function (match, $1, $2, $3) {
         let s = $2.replace(/(b:[\w]+=")([^"]+)(")/g, function (match, $1, $2, $3) {
             // 所有以b:开头的
             $2 = $2.split(";").map(function (v) {
@@ -110,6 +132,21 @@ function traux(template, isWx = true) {
             }).join(" ");
 
             return $1.replace("b:", "") + $2 + $3;
+        });
+        s = s.replace(/(@:[\w]+=")([^"]+)(")/g, function (match, $2_1, $2_2, $2_3) {
+            // 所有以@:开头的
+            if ($2_1.indexOf("@:for") > -1) {
+                // 处理for循环
+                // console.log(handleArrayDirective($2_2));
+                $2_2 = handleArrayDirective($2_2);
+                return $2_2;
+            }
+
+            if ($2_1.indexOf("@:if") > -1) {
+                return `wx:if="{{${$2_2}}}"`
+            }
+
+            return "";
         });
         return $1 + s + $3;
     });
