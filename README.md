@@ -41,6 +41,11 @@ index.wxc
                     2
                 ]
             }
+        },
+        methods: {
+            onTaped() {
+
+            }
         }
     }
 </script>
@@ -91,6 +96,10 @@ exports.default = {
             show: true,
             items: [1, 2]
         };
+    },
+
+    methods: {
+        onTaped: function onTaped() {}
     }
 };
 
