@@ -2,6 +2,9 @@ const path = require('path');
 
 var isWin = /^win/.test(process.platform);
 
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 let config = {};
 // config.target = "web";
 config.workspaceroot = path.join(__dirname, "src/pages");
@@ -16,20 +19,34 @@ if (isWin) {
     }
 }
 
+const extractAppScss = new ExtractTextPlugin('app.wxss');
+
 module.exports = {
     config: config,
     date: new Date(),
     webpackconfig: {
-        entry: "",
+        entry: "./src/app",
         output: {
             path: config.destroot,
-            filename: "index.js",
+            filename: "app.js",
             library: "MyLibrary",
             libraryTarget: "umd",
             publicPath: "/assets/"
         },
-        watch: false,
-        plugins: [],
+        watch: true,
+        plugins: [
+            new CopyWebpackPlugin([
+                {
+                    from: './src/app.json',
+                    to: './app.json'
+                },
+                {
+                    from: './src/static/**/*',
+                    to: './static'
+                }
+            ], {}),
+            new ExtractTextPlugin("app.wxss"),
+        ],
         module: {
             rules: [
                 {
@@ -56,11 +73,38 @@ module.exports = {
                                 ["transform-runtime", {
                                     "helpers": false,
                                     "polyfill": false,
-                                    "regenerator": true
+                                    "regenerator": false
                                 }]
                             ]
                         }
                     }
+                },
+                {
+                    test: /\.scss$/,
+                    use: ExtractTextPlugin.extract({
+                        fallback: 'style-loader',
+                        use: [
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    // If you are having trouble with urls not resolving add this setting.
+                                    // See https://github.com/webpack-contrib/css-loader#url
+                                    url: false,
+                                    minimize: false,
+                                    sourceMap: false
+                                }
+                            },
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    sourceMap: true
+                                }
+                            },
+                            {
+                                loader: 'postcss-loader'
+                            }
+                        ]
+                    })
                 }
             ]
         }

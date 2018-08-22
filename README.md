@@ -101,9 +101,15 @@ $base64image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAYAAAB4sfm
 npm install
 ```
 
-### 编译
+### 编译小程序vue
 
 ```
-npm run dev
+npm run watch:mina
+```
+
+### 项目级
+
+```
+webpack
 ```
 

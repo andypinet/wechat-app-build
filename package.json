@@ -2,9 +2,9 @@
   "name": "test-mina-build",
   "version": "1.0.0",
   "description": "",
-  "main": "webpack.build.js",
+  "main": "",
   "scripts": {
-    "dev": "node webpack.build.js"
+    "dev": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,9 @@
     "bourbon": "^5.0.0",
     "cacheman": "^2.2.1",
     "chalk": "^2.3.0",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fs-extra": "^5.0.0",
     "jsdom": "^11.6.1",
     "node-sass": "^4.7.2",
@@ -34,12 +37,16 @@
     "postcss": "^6.0.16",
     "postcss-icss-selectors": "^2.0.3",
     "postcss-js": "^1.0.1",
+    "postcss-loader": "^3.0.0",
+    "postcss-preset-env": "^5.3.0",
     "pretty": "^2.0.0",
     "rm": "^0.1.8",
+    "sass-loader": "^7.1.0",
     "sassy-lists": "^3.0.1",
+    "style-loader": "^0.22.1",
     "voca": "^1.4.0",
     "vue-parser": "^1.1.6",
-    "webpack": "^3.10.0",
+    "webpack": "^4.17.1",
     "yargs": "^10.1.1"
   }
 }

@@ -17,7 +17,7 @@ const jsdom = require('jsdom')
 const watch = require('node-watch')
 const Cacheman = require('cacheman')
 const webpack = require('webpack')
-const projectconfig = require('./webpack.conf')
+const projectconfig = require('./build.conf')
 
 const csscache = new Cacheman('css')
 const xmlcache = new Cacheman('xml')
