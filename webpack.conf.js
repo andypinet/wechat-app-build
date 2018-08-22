@@ -4,10 +4,10 @@ var isWin = /^win/.test(process.platform);
 
 let config = {};
 // config.target = "web";
-config.workspaceroot = path.join(__dirname, "src");
+config.workspaceroot = path.join(__dirname, "src/pages");
 config.wxproot = path.join(config.workspaceroot);
 if (isWin) {
-
+    config.destroot =  path.join(__dirname, "./dist");
 } else {
     config.destroot =  path.join(__dirname, "./dist");
     // config.destroot =  path.join(__dirname, "../test-web");
