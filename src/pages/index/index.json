@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "test-c": "/pages/c/index"
+    "test-c": "/components/c/index"
   }
 }
+

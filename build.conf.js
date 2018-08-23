@@ -7,8 +7,11 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 let config = {};
 // config.target = "web";
-config.workspaceroot = path.join(__dirname, "src/pages");
-config.wxproot = path.join(config.workspaceroot);
+config.workspaceroot = path.join(__dirname, "src");
+config.wxproot = [
+    path.join(config.workspaceroot, "pages"),
+    path.join(config.workspaceroot, "components")
+];
 if (isWin) {
     config.destroot =  path.join(__dirname, "./dist");
 } else {
@@ -41,9 +44,20 @@ module.exports = {
                     to: './app.json'
                 },
                 {
-                    from: './src/static/**/*',
+                    context: './src/static',
+                    from: '**/*',
                     to: './static'
-                }
+                },
+                {
+                    context: './src/pages',
+                    from: '**/*.json',
+                    to: './pages'
+                },
+                {
+                    context: './src/components',
+                    from: '**/*.json',
+                    to: './components'
+                },
             ], {}),
             new ExtractTextPlugin("app.wxss"),
         ],

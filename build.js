@@ -349,14 +349,14 @@ function handleVue(evt, filepath) {
                     }
                 });
 
-                diffchange(path.join(folder, "/index.json"), fs.readFileSync(path.join(folder, "/index.json")), otscache).then(function (isChange) {
-                    if (isChange === 'change') {
-                        fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
-                    }
-                    if (isChange === 'init') {
-                        fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
-                    }
-                })
+                // diffchange(path.join(folder, "/index.json"), fs.readFileSync(path.join(folder, "/index.json")), otscache).then(function (isChange) {
+                //     if (isChange === 'change') {
+                //         fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
+                //     }
+                //     if (isChange === 'init') {
+                //         fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
+                //     }
+                // })
             })
 
         }
@@ -621,8 +621,10 @@ function handleWeb(evt, filepath) {
   }
 }
 
-if (projectconfig.config.target && projectconfig.config.target === 'web') {
-  watch(projectconfig.config.wxproot, { recursive: true }, handleWeb)
-} else {
-  watch(projectconfig.config.wxproot, { recursive: true }, handleVue)
-}
+// if (projectconfig.config.target && projectconfig.config.target === 'web') {
+//   watch(projectconfig.config.wxproot, { recursive: true }, handleWeb)
+// } else {
+//   watch(projectconfig.config.wxproot, { recursive: true }, handleVue)
+// }
+
+watch(projectconfig.config.wxproot, { recursive: true }, handleVue)
