@@ -20,12 +20,15 @@ function assets(path, base = cdnserver) {
 let app = getApp()
 
 export default {
-  behaviors: [],
+  mixins: [globalMixins.get('hello')],
   data() {
     return {
       state: 'unload',
       src: assets('banner1.png')
     }
+  },
+  onLoad() {
+    this.sayHello()
   },
   onBindLoad() {
     this.setData({
