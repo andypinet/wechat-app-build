@@ -1,7 +1,1 @@
-let js = {};
-(function (exports) {
-@{js}
-})(js);
-let component = js.default;
-component.data = js.default.data();
-Component(component)
+// TODO 考虑 app.js
