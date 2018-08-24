@@ -691,6 +691,4 @@ function compileVue(folderName){
 compileVue('components')
 compileVue('pages')
 
-process.nextTick(function() {
-  watch(projectconfig.config.wxproot, { recursive: false }, handleVue)
-})
+watch(projectconfig.config.wxproot, { recursive: true }, handleVue)

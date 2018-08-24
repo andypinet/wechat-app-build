@@ -1,8 +1,13 @@
-const regeneratorRuntime = require('./static/runtime.js');
+const regeneratorRuntime = require('../../static/runtime.js');
+const computedBehavior = require('../../static/computed.behavior.js');
 let js = {};
 (function (exports) {
 @{js}
 })(js);
-let component = js.default;
-component.data = js.default.data();
-Component(component)
+let componentDefine = js.default;
+componentDefine.data = js.default.data();
+if (!componentDefine.behaviors) {
+  componentDefine.behaviors = []
+}
+componentDefine.behaviors = componentDefine.behaviors.concat([computedBehavior])
+Component(componentDefine)

@@ -1,4 +1,4 @@
-const regeneratorRuntime = require('./static/runtime.js');
+const regeneratorRuntime = require('../../static/runtime.js');
 let js = {};
 (function (exports) {
 @{js}
