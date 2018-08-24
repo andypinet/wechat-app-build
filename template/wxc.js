@@ -1,3 +1,5 @@
+const app = getApp()
+const wxp = require('../../static/wx.promise.js').default
 const regeneratorRuntime = require('../../static/runtime.js');
 const computedBehavior = require('../../static/computed.behavior.js');
 let js = {};

@@ -5,8 +5,9 @@ var gap = require('gulp-append-prepend');
 gulp.task('r', function() {
     gulp.src('./dist/index.js')
         .pipe(gap.prependText(`
-            const regeneratorRuntime = require('./static/runtime.js');
-        `))
+const regeneratorRuntime = require('./static/runtime.js');
+const wxp = require('./static/wx.promise.js').default;
+`))
         .pipe(rename(function (path) {
             path.basename = "app";
         }))
