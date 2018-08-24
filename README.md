@@ -16,7 +16,6 @@
 
 文件index.json中有component为true 就定义为component
 
-
 生成的components js文件可以使用template/wxc.js改变
 生成的pages js文件可以使用template/wxp.js改变
 
@@ -28,7 +27,7 @@
 3. 提供 es2016+ 支持
 4. 提供 sass 支持
 5. 提供 postcss 支持
-6。提供一些 behaviors 支持 (sdk >= 2.2.3)
+6. 提供一些 behaviors 支持 (sdk >= 2.2.3)
 
 ### 安装
 
