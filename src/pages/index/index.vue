@@ -7,6 +7,7 @@
                     bind:load="onBindLoad"
                     src="{{src}}" mode="widthFix"></image>
         </view>
+        <view>computed: {{c}}</view>
         <test-c></test-c>
     </div>
 </template>
@@ -25,6 +26,16 @@ export default {
     return {
       state: 'unload',
       src: assets('banner1.png')
+    }
+  },
+  computed: {
+    c() {
+      return `src: ${this.data.src}`;
+    }
+  },
+  watch: {
+    ['state'](val, oldVal) {
+      console.log('new: %s, old: %s', val, oldVal);
     }
   },
   onLoad() {
