@@ -18,7 +18,6 @@ let cdnserver = 'http://img.auntec.cn/gsxxcx/images/'
 function assets(path, base = cdnserver) {
   return base + path + '?v=' + Date.now()
 }
-let app = getApp()
 
 export default {
   mixins: [globalMixins.get('hello')],

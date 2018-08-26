@@ -196,12 +196,8 @@ function traux(template, isWx = true) {
   return pretty(ret)
 }
 
-let wxptemplate = function(path, js, after = '') {
-  return fs
-    .readFileSync(path)
-    .toString()
-    .replace('@{js}', js)
-    .replace('@{after}', after)
+let wxptemplate = function(tpl, js, after = '') {
+  return tpl.replace('@{js}', js).replace('@{after}', after)
 }
 
 function handleVue(evt, filepath) {
@@ -252,6 +248,10 @@ function handleVue(evt, filepath) {
             projectconfig.config.destroot,
             `/${tmpfolder}/index.js`
           )
+          let mainjspath = path.join(
+            projectconfig.config.destroot,
+            `/${tmpfolder}/main.js`
+          )
 
           // 确保目录存在
           fse.ensureDirSync(destroot)
@@ -269,7 +269,8 @@ function handleVue(evt, filepath) {
             path.join(projectconfig.config.destroot, `/${tmpfolder}/index.js`)
           )
 
-          let scopedcss = {}
+          let scoped
+          css = {}
 
           let ret = {}
           ret.$is = paths[paths.length - 2]
@@ -284,19 +285,37 @@ function handleVue(evt, filepath) {
             let compilejs = fs.readFileSync(tmpcompilepath).toString()
 
             if (componentJson.component) {
+              const temlpateModule = require(path.join(
+                __dirname,
+                './template/wxc.js'
+              ))
+
               let wxp = wxptemplate(
-                path.join(__dirname, './template/wxc.js'),
-                compilejs,
+                temlpateModule.tpl,
+                `require('./main.js')`,
                 '//@end'
               )
               fse.outputFileSync(destscriptpath, wxp)
+              fse.outputFileSync(
+                mainjspath,
+                `${temlpateModule.bef}${compilejs}`
+              )
             } else {
+              const temlpateModule = require(path.join(
+                __dirname,
+                './template/wxp.js'
+              ))
+
               let wxp = wxptemplate(
-                path.join(__dirname, './template/wxp.js'),
-                compilejs,
+                temlpateModule.tpl,
+                `require('./main.js')`,
                 '//@end'
               )
               fse.outputFileSync(destscriptpath, wxp)
+              fse.outputFileSync(
+                mainjspath,
+                `${temlpateModule.bef}${compilejs}`
+              )
             }
 
             scopedcss = {}
@@ -340,7 +359,7 @@ function handleVue(evt, filepath) {
                 }
 
                 postcss(postcssmodules)
-                  .process(compiledStyle.css, {map: false})
+                  .process(compiledStyle.css, { map: false })
                   .then(result => {
                     if (isscoped) {
                       result.css.replace(exportcss, function(
@@ -417,270 +436,7 @@ function handleVue(evt, filepath) {
   }
 }
 
-let webtemplate = function(path, css, template, js, is, after = '') {
-  return fs
-    .readFileSync(path)
-    .toString()
-    .replace('@{css}', css)
-    .replace('@{template}', template)
-    .replace('@{js}', js)
-    .replace('@{is}', is)
-    .replace('@{after}', after)
-}
-
-function handleWeb(evt, filepath) {
-  let paths = filepath.split(path.sep)
-  let filename = paths[paths.length - 1]
-  let folder = paths
-    .filter(function(v, index) {
-      if (index === paths.length - 1) {
-        return false
-      }
-      return true
-    })
-    .join(path.sep)
-  if (filepath.indexOf('___jb_') < 0) {
-    if (filename.endsWith('.wxc')) {
-      let destfolder = folder.replace(projectconfig.config.workspaceroot, '')
-      let packagename = paths[paths.length - 2]
-      let tmpfolder = paths
-        .slice(paths.length - 3, paths.length - 1)
-        .join(path.sep)
-      try {
-        let filecontent = utils.readFile(filepath).toString()
-        let destroot = path.join(projectconfig.config.destroot, destfolder)
-        if (filecontent) {
-          console.log(chalk.cyan('build package ' + filepath))
-
-          let myScriptContents = vueParser.parse(filecontent, 'script', {
-            lang: ['js']
-          })
-          let tmppath = path.join(
-            folder,
-            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.js`
-          )
-          let tmpcompilepath = path.join(
-            folder,
-            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.compile.js`
-          )
-          let tmpminpath = path.join(
-            folder,
-            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.min.js`
-          )
-          let destscriptpath = path.join(
-            projectconfig.config.destroot,
-            `/${tmpfolder}/index.js`
-          )
-
-          // 确保目录存在
-          fse.ensureDirSync(destroot)
-
-          myScriptContents = myScriptContents
-            .replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '')
-            .trim()
-
-          fse.outputFileSync(tmppath, myScriptContents)
-
-          let filebasename = ''
-          if (filename.indexOf('wxc') > -1) {
-            filebasename = filename.replace(/.wxc$/, '')
-          } else {
-            filebasename = filename.replace(/.wxp$/, '')
-          }
-
-          // 先确保有文件
-          fse.ensureFileSync(
-            path.join(projectconfig.config.destroot, `/${tmpfolder}/index.js`)
-          )
-
-          let scopedcss = {}
-
-          let ret = {}
-          ret.$is = paths[paths.length - 2]
-
-          compile(filebasename, tmppath, tmpcompilepath).then(function() {
-            // fse.copySync(tmpcompilepath, destscriptpath);
-
-            let compilejs = fs.readFileSync(tmpcompilepath)
-
-            scopedcss = {}
-
-            let myStyleContents = vueParser
-              .parse(filecontent, 'style', { lang: ['scss'] })
-              .replace('tslint:enable', '')
-              .replace('tslint:disable', '')
-              .trim()
-
-            let constants = {
-              '#{$IS}': ret.$is
-            }
-
-            myStyleContents =
-              `
-                            $IS: ${ret.$is};
-                        ` + myStyleContents
-
-            diffchange(
-              path.join(folder, '/index.wxss'),
-              Buffer.from(myStyleContents),
-              xmlcache
-            ).then(function(isChange) {
-              if (isChange !== 'unchange') {
-                const compiledStyle = sass.renderSync({
-                  data: myStyleContents,
-                  importer: packageImporter({}),
-                  includePaths: [folder],
-                  functions: {}
-                })
-
-                let exportcss = /(:export[\s]*{)([^}]*)(})/g
-
-                let isscoped = false
-                if (/<style.*scoped>/g.test(filecontent)) {
-                  isscoped = true
-                } else {
-                }
-
-                let postcssmodules = []
-
-                if (isscoped) {
-                  postcssmodules.push(cssmodules({}))
-                }
-
-                postcss(postcssmodules)
-                  .process(compiledStyle.css)
-                  .then(result => {
-                    if (isscoped) {
-                      result.css.replace(exportcss, function(
-                        match,
-                        $1,
-                        $2,
-                        $3
-                      ) {
-                        $2.trim()
-                          .split(';')
-                          .forEach(function(v) {
-                            let s = v.trim().split(':')
-                            if (s.length > 1) {
-                              scopedcss[s[0].trim()] = s[1].trim()
-                            }
-                          })
-                      })
-
-                      result.css = result.css.replace(exportcss, '')
-                    }
-
-                    let myTemplateContents = vueParser
-                      .parse(filecontent, 'template', {})
-                      .replace('//////////', '')
-                      .trim()
-
-                    myTemplateContents = v.tr(myTemplateContents, constants)
-
-                    diffchange(
-                      path.join(folder, '/index.wxml'),
-                      Buffer.from(myTemplateContents),
-                      xmlcache
-                    ).then(function(isChange) {
-                      if (isChange === 'change') {
-                      }
-
-                      if (isscoped) {
-                        for (let key in scopedcss) {
-                          myTemplateContents = myTemplateContents.replace(
-                            new RegExp(`class="${key}`, 'g'),
-                            'class="' + scopedcss[key]
-                          )
-                        }
-                      }
-
-                      // fse.outputFileSync(path.join(destroot, "/index.wxml"), myTemplateContents);
-
-                      ret.template = myTemplateContents
-                      ret.template = ret.template.replace(
-                        /(<view)([^>])(@:if=")([^"]*)(">)/g,
-                        function(match, $1, $2, $3, $4, $5) {
-                          return $1 + $2 + $3.replace('@:if', 'v-if') + $4 + $5
-                        }
-                      )
-                      ret.template = ret.template.replace(
-                        /(<view)([^>])(@:for=")([^"]*)(">)/g,
-                        function(match, $1, $2, $3, $4, $5) {
-                          return (
-                            $1 + $2 + $3.replace('@:for', 'v-for') + $4 + $5
-                          )
-                        }
-                      )
-                      // 处理view
-                      ret.template = ret.template.replace(
-                        /(<view)([^>]*)>/g,
-                        function(match, $1, $2, $3) {
-                          return $1.replace('view', 'aux-view') + $2 + '>'
-                        }
-                      )
-                      ret.template = ret.template.replace(
-                        /(<\/[\s]*)(view>)/g,
-                        function(match, $1, $2, $3) {
-                          return $1 + $2.replace('view', 'aux-view')
-                        }
-                      )
-                      // 处理text
-                      ret.template = ret.template.replace(
-                        /(<text)([^>]*)>/g,
-                        function(match, $1, $2, $3) {
-                          return $1.replace('text', 'aux-text') + $2 + '>'
-                        }
-                      )
-                      ret.template = ret.template.replace(
-                        /(<\/[\s]*)(text>)/g,
-                        function(match, $1, $2, $3) {
-                          return $1 + $2.replace('text', 'aux-text')
-                        }
-                      )
-
-                      let webapp = webtemplate(
-                        path.join(__dirname, './template/wec.js'),
-                        result.css,
-                        ret.template,
-                        compilejs,
-                        ret.$is,
-                        '//@endweb'
-                      )
-
-                      fse.outputFileSync(
-                        path.join(destroot, '/index.js'),
-                        webapp
-                      )
-                    })
-
-                    // fse.outputFileSync(path.join(destroot, "/index.wxss"), result.css);
-                  })
-              }
-            })
-
-            // diffchange(path.join(folder, "/index.json"), fs.readFileSync(path.join(folder, "/index.json")), otscache).then(function (isChange) {
-            //     if (isChange === 'change') {
-            //         fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
-            //     }
-            //     if (isChange === 'init') {
-            //         fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
-            //     }
-            // })
-          })
-        }
-      } catch (e) {}
-    }
-  }
-}
-
-// if (projectconfig.config.target && projectconfig.config.target === 'web') {
-//   watch(projectconfig.config.wxproot, { recursive: true }, handleWeb)
-// } else {
-//   watch(projectconfig.config.wxproot, { recursive: true }, handleVue)
-// }
-
-
-function compileVue(folderName){
+function compileVue(folderName) {
   let dir = path.join(`${projectconfig.config.workspaceroot}`, folderName)
   let componentsPaths = fs.readdirSync(dir)
   for (let componentPath of componentsPaths) {

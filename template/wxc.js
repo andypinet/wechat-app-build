@@ -1,15 +1,19 @@
+module.exports = {
+  bef: `
 const app = getApp()
 const wxp = require('../../static/wx.promise.js').default
 const regeneratorRuntime = require('../../static/runtime.js');
+const globalMixins = require('../../static/mixins.js');
+`,
+  tpl: `
 const computedBehavior = require('../../static/computed.behavior.js');
-let js = {};
-(function (exports) {
-@{js}
-})(js);
-let componentDefine = js.default;
-componentDefine.data = js.default.data();
-if (!componentDefine.behaviors) {
-  componentDefine.behaviors = []
+let componentDefine = @{js};
+let component = componentDefine.default;
+component.data = js.data();
+if (!component.behaviors) {
+  component.behaviors = []
 }
-componentDefine.behaviors = componentDefine.behaviors.concat([computedBehavior])
-Component(componentDefine)
+component.behaviors = component.behaviors.concat([computedBehavior])
+Component(component)
+  `
+}
