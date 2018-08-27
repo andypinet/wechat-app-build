@@ -35,6 +35,12 @@
 npm install
 ```
 
+#### 全局
+
+```
+npm install -g babel browserify webpack-cli
+```
+
 关于 node-sass
 
 ```

@@ -9,7 +9,7 @@ const globalMixins = require('../../static/mixins.js');
 const computedBehavior = require('../../static/computed.behavior.js');
 let componentDefine = @{js};
 let component = componentDefine.default;
-component.data = js.data();
+component.data = component.data();
 if (!component.behaviors) {
   component.behaviors = []
 }

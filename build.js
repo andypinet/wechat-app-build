@@ -23,6 +23,7 @@ const csscache = new Cacheman('css')
 const xmlcache = new Cacheman('xml')
 const otscache = new Cacheman('ots')
 
+// 检测两个文件之间变动
 async function diffchange(key, data, cachestore) {
   let newval = data
   let cacval = await cachestore.get(key)
@@ -72,8 +73,8 @@ const TMPFOLDERNAME = 'tmp'
 //     }))
 // }
 
-function compile(filename, filepath, destpath, options = {}) {
-  let cwd = `npx babel ${filepath} --out-file ${destpath}`
+function compile(filepath, destpath, options = {}) {
+  let cwd = `npx babel ${filepath} --out-file ${destpath} && browserify  ${destpath} -s NameOfModule --outfile ${options.bundle} `
   if (options.sourcemap) {
     cwd = cwd + ' --source-maps'
   }
@@ -232,6 +233,13 @@ function handleVue(evt, filepath) {
           let myScriptContents = vueParser.parse(filecontent, 'script', {
             lang: ['js']
           })
+
+          myScriptContents = myScriptContents.replace(/require\([\w-\s.\/'"]+\)/g, function(
+            match
+          ) {
+            return match.replace('require', 'WXREQUIRE')
+          })
+
           let tmppath = path.join(
             folder,
             `../../../${TMPFOLDERNAME}/${tmpfolder}/index.js`
@@ -239,6 +247,10 @@ function handleVue(evt, filepath) {
           let tmpcompilepath = path.join(
             folder,
             `../../../${TMPFOLDERNAME}/${tmpfolder}/index.compile.js`
+          )
+          let tmpbundlepath = path.join(
+            folder,
+            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.bundle.js`
           )
           let tmpminpath = path.join(
             folder,
@@ -279,10 +291,18 @@ function handleVue(evt, filepath) {
             '%=IS%': ret.$is
           }
 
-          compile(filebasename, tmppath, tmpcompilepath).then(function() {
+          compile(tmppath, tmpcompilepath, {
+            bundle: tmpbundlepath
+          }).then(function() {
             // fse.copySync(tmpcompilepath, destscriptpath);
 
-            let compilejs = fs.readFileSync(tmpcompilepath).toString()
+            let compilejs = fs.readFileSync(tmpbundlepath).toString()
+
+            compilejs = compilejs.replace(/WXREQUIRE\([\w-\s.\/'"]+\)/g, function(
+              match
+            ) {
+              return match.replace('WXREQUIRE', 'require')
+            })
 
             if (componentJson.component) {
               const temlpateModule = require(path.join(
@@ -420,15 +440,6 @@ function handleVue(evt, filepath) {
                   })
               }
             })
-
-            // diffchange(path.join(folder, "/index.json"), fs.readFileSync(path.join(folder, "/index.json")), otscache).then(function (isChange) {
-            //     if (isChange === 'change') {
-            //         fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
-            //     }
-            //     if (isChange === 'init') {
-            //         fse.copySync(path.join(folder, "/index.json"), path.join(destroot, "/index.json"));
-            //     }
-            // })
           })
         }
       } catch (e) {}
