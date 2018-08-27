@@ -1,8 +1,7 @@
 import './app.scss'
 
-console.log(wxp)
-
-App({
-  async onLaunch() {
+createApp({
+  async onShow() {
+    console.log(this)
   }
 })

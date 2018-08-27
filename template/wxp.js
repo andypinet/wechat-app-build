@@ -21,6 +21,9 @@ Page({
   onLoad(...options) {
     let self = this
     watch = new Watch(this)
+    this.$mp = {
+      query: options
+    }
     this.AUIsetData = this.setData
     this.setComputed = this.setData
     this.setData = function(opt) {

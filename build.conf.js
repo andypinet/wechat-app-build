@@ -91,6 +91,8 @@ module.exports = {
                   ]
                 ],
                 plugins: [
+                  ['transform-object-rest-spread'],
+                  ['transform-async-generator-functions'],
                   [
                     'transform-runtime',
                     {

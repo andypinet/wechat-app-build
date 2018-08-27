@@ -11,10 +11,15 @@
     ]
   ],
   "plugins": [
-    ["transform-runtime", {
-      "helpers": false,
-      "polyfill": false,
-      "regenerator": false
-    }]
+    ["transform-object-rest-spread"],
+    ["transform-async-generator-functions"],
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": false
+      }
+    ]
   ]
 }
