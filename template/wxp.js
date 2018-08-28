@@ -4,6 +4,7 @@ const app = getApp()
 const wxp = require('../../static/wx.promise.js').default
 const regeneratorRuntime = require('../../static/runtime.js');
 const globalMixins = require('../../static/mixins.js');
+const globalValidate = require('../../static/validate.js');
 `,
   tpl: `
 const createPage = require('../../static/createpage.js');

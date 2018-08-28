@@ -13,6 +13,7 @@
   "author": "lingbaichao",
   "license": "MIT",
   "devDependencies": {
+    "andy-aui": "^1.18.16",
     "andy-ui": "^0.5.34",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
