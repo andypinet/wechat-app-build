@@ -74,7 +74,9 @@ const TMPFOLDERNAME = 'tmp'
 // }
 
 function compile(filepath, destpath, options = {}) {
-  let cwd = `npx babel ${filepath} --out-file ${destpath} && browserify  ${destpath} -s NameOfModule --outfile ${options.bundle} `
+  let cwd = `npx babel ${filepath} --out-file ${destpath} && browserify  ${destpath} -s NameOfModule --outfile ${
+    options.bundle
+  } `
   if (options.sourcemap) {
     cwd = cwd + ' --source-maps'
   }
@@ -234,11 +236,12 @@ function handleVue(evt, filepath) {
             lang: ['js']
           })
 
-          myScriptContents = myScriptContents.replace(/require\([\w-\s.\/'"]+\)/g, function(
-            match
-          ) {
-            return match.replace('require', 'WXREQUIRE')
-          })
+          myScriptContents = myScriptContents.replace(
+            /require\([\w-\s.\/'"]+\)/g,
+            function(match) {
+              return match.replace('require', 'WXREQUIRE')
+            }
+          )
 
           let tmppath = path.join(
             folder,
@@ -298,11 +301,12 @@ function handleVue(evt, filepath) {
 
             let compilejs = fs.readFileSync(tmpbundlepath).toString()
 
-            compilejs = compilejs.replace(/WXREQUIRE\([\w-\s.\/'"]+\)/g, function(
-              match
-            ) {
-              return match.replace('WXREQUIRE', 'require')
-            })
+            compilejs = compilejs.replace(
+              /WXREQUIRE\([\w-\s.\/'"]+\)/g,
+              function(match) {
+                return match.replace('WXREQUIRE', 'require')
+              }
+            )
 
             if (componentJson.component) {
               const temlpateModule = require(path.join(
@@ -455,7 +459,51 @@ function compileVue(folderName) {
   }
 }
 
+function compileUtils(fileName = 'index') {
+  let srcfolder = path.join(projectconfig.config.workspaceroot, 'utils/compile')
+  let destFolder = path.join(projectconfig.config.destroot, 'utils/compile')
+  let tmpFolder = path.join(projectconfig.config.tmproot, 'utils/compile')
+
+  fse.ensureDirSync(destFolder)
+  fse.ensureDirSync(tmpFolder)
+
+  let fileContent = utils.readFile(path.join(srcfolder, 'index.js')).toString()
+  fileContent = fileContent.replace(/require\([\w-\s.\/'"]+\)/g, function(
+    match
+  ) {
+    return match.replace('require', 'WXREQUIRE')
+  })
+
+  fse.outputFileSync(path.join(tmpFolder, `${fileName}.js`), fileContent)
+
+  compile(
+    path.join(tmpFolder, `${fileName}.js`),
+    path.join(tmpFolder, `${fileName}.compile.js`),
+    {
+      bundle: path.join(tmpFolder, `${fileName}.bundle.js`)
+    }
+  ).then(function() {
+    let compilejs = utils
+      .readFile(path.join(tmpFolder, `${fileName}.bundle.js`))
+      .toString()
+    compilejs = compilejs.replace(/WXREQUIRE\([\w-\s.\/'"]+\)/g, function(
+      match
+    ) {
+      return match.replace('WXREQUIRE', 'require')
+    })
+
+    compilejs = `
+    const regeneratorRuntime = require('../../static/runtime.js');
+
+    ${compilejs}
+    `
+
+    fse.outputFileSync(path.join(destFolder, `${fileName}.js`), compilejs)
+  })
+}
+
 compileVue('components')
 compileVue('pages')
+compileUtils('index')
 
 watch(projectconfig.config.wxproot, { recursive: true }, handleVue)

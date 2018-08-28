@@ -16,7 +16,7 @@ if (!component.behaviors) {
 }
 component.behaviors = component.behaviors.concat([computedBehavior])
 Component({
-  {},
+  ...{},
   ...component,
   attached(...args) {
     this.$set = function(...args) {

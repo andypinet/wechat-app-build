@@ -13,6 +13,7 @@ config.wxproot = [
   path.join(config.workspaceroot, 'pages'),
   path.join(config.workspaceroot, 'components')
 ]
+config.tmproot = path.join(__dirname, 'tmp')
 if (isWin) {
   config.destroot = path.join(__dirname, './dist')
 } else {
