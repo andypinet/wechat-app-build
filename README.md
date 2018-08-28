@@ -29,6 +29,17 @@
 5. 提供 postcss 支持
 6. 提供一些 behaviors 支持 (sdk >= 2.2.3)
 
+App
+
+onLaunch
+$systemInfo
+$appOptions
+
+onShow
+$appOptions
+
+onShow
+
 ### 不同的
 1. require是小程序的函数 不翻译
 2. import语句只支持node_modules引入
