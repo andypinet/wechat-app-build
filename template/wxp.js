@@ -34,6 +34,13 @@ Page({
       })
       return watch.setData(d)
     }
+    this.$set = function(...args) {
+      if (args.length == 1) {
+        this.setData(args[0])
+      } else if (args.length == 2) {
+        this.setData(args[0], args[1])
+      }
+    }
     _pegeDef.onLoad && _pegeDef.onLoad.apply(this, ...options)
   }
 })

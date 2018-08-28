@@ -14,6 +14,19 @@ if (!component.behaviors) {
   component.behaviors = []
 }
 component.behaviors = component.behaviors.concat([computedBehavior])
-Component(component)
+Component({
+  {},
+  ...component,
+  attached(...args) {
+    this.$set = function(...args) {
+      if (args.length == 1) {
+        this.setData(args[0])
+      } else if (args.length == 2) {
+        this.setData(args[0], args[1])
+      }
+    }
+    component.attached && component.attached.apply(this, ...args)
+  }
+})
   `
 }

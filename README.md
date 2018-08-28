@@ -40,6 +40,12 @@ onShow
 
 - $appOptions
 
+Page, Component
+
+- computed 支持
+- 提供$set方法  提供`$set(key, value)`模式
+- Page 提供mixins  component暂时无法实现
+
 ### 不同的
 1. require是小程序的函数 不翻译
 2. import语句只支持node_modules引入
