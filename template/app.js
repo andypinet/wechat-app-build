@@ -9,6 +9,7 @@ function createApp(def) {
   }
   ret.$appOptions = {}
   ret.onLaunch = function(options) {
+    this.$systemInfo =  wx.getSystemInfoSync()
     def.onLaunch && def.onLaunch.call(this, options)
   }
   ret.onShow = function(options) {
@@ -20,5 +21,6 @@ function createApp(def) {
   }
   App(ret)
 }
+
   `
 }
