@@ -28,12 +28,30 @@ Page({
     }
     this.AUIsetData = this.setData
     this.setComputed = this.setData
+
+    const computed = _pegeDef.computed || {}
+    const computedKeys = Object.keys(computed)
+    const computedCache = {}
+
+    // 计算 computed
+    const calcComputed = (scope) => {
+      const needUpdate = {}
+
+      for (let key of computedKeys) {
+        const value = computed[key].call(scope) // 计算新值
+        if (computedCache[key] !== value) needUpdate[key] = computedCache[key] = value
+      }
+
+      return needUpdate
+    };
+
     this.setData = function(opt) {
-      let d = opt
-      const computedProps = _pegeDef.computed
-      Object.keys(computedProps).forEach(function(k) {
-        d[k] = computedProps[k].bind(self)()
-      })
+      let computedData = calcComputed(self)
+      let d = {
+        ...opt,
+        ...computedData
+      }
+
       return watch.setData(d)
     }
     this.$set = function(...args) {

@@ -2,7 +2,7 @@ module.exports = {
   bef: `
 const regeneratorRuntime = require('./static/runtime.js');
 const wxp = require('./static/wx.promise.js').default;
-const globalValidate = require('../../static/validate.js');
+const globalValidate = require('./static/validate.js');
 
 function createApp(def) {
   let ret = {
