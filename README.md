@@ -33,12 +33,12 @@ App
 
 onLaunch
 
-$systemInfo
-$appOptions
+- $systemInfo
+- $appOptions
 
 onShow
 
-$appOptions
+- $appOptions
 
 ### 不同的
 1. require是小程序的函数 不翻译
