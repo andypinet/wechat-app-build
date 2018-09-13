@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-const RunAfterBuildPlugin = require('webpack-run-after-build-plugin')
+const PostCompilePlugin = require('post-compile-webpack-plugin')
 
 const exec = require('child_process').exec
 
@@ -69,7 +69,7 @@ module.exports = {
         {}
       ),
       new ExtractTextPlugin('app.wxss'),
-      new RunAfterBuildPlugin(() => {
+      new PostCompilePlugin(() => {
         console.log('Files are ready to use!');
         exec('gulp r', function(err, stdout, stderr) {
           if (err) {
