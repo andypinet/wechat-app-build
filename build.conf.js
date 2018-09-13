@@ -10,6 +10,8 @@ const PostCompilePlugin = require('post-compile-webpack-plugin')
 
 const exec = require('child_process').exec
 
+const fs = require('fs')
+
 let config = {}
 // config.target = "web";
 config.workspaceroot = path.join(__dirname, 'src')
@@ -77,6 +79,7 @@ module.exports = {
           }
           console.log(stdout)
           console.error(stderr)
+          fs.unlinkSync(path.join(__dirname, 'dist/index.js'))
         })
       })
     ],

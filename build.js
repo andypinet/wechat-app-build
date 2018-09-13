@@ -13,10 +13,8 @@ const postcss = require('postcss')
 const pretty = require('pretty')
 const cssmodules = require('postcss-icss-selectors')
 const v = require('voca')
-const jsdom = require('jsdom')
 const watch = require('node-watch')
 const Cacheman = require('cacheman')
-const webpack = require('webpack')
 const projectconfig = require('./build.conf')
 
 const csscache = new Cacheman('css')
@@ -55,9 +53,6 @@ const utils = {
     return require(path)
   }
 }
-
-const spinner = ora('building for production... ')
-spinner.start()
 
 const TMPFOLDERNAME = 'tmp'
 
@@ -506,4 +501,11 @@ compileVue('components')
 compileVue('pages')
 compileUtils('index')
 
-watch(projectconfig.config.wxproot, { recursive: true }, handleVue)
+const spinner = ora('building for production... ')
+spinner.start()
+
+if (argv.watch) {
+  watch(projectconfig.config.wxproot, { recursive: true }, handleVue)
+} else {
+  spinner.stop()
+}

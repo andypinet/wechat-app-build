@@ -72,7 +72,7 @@ npm set sass_binary_site https://cdn.npm.taobao.org/dist/node-sass
 ### 编译小程序vue
 
 ```
-npm run watch:mina
+npm run dev
 ```
 
 ### 项目级

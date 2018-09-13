@@ -4,7 +4,9 @@
   "description": "",
   "main": "",
   "scripts": {
-    "watch:mina": "node build.js"
+    "watch:mina": "node build.js",
+    "dev": "node build.js --watch",
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
