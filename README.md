@@ -80,9 +80,3 @@ npm run watch:mina
 ```
 webpack
 ```
-
-### gulp 文件级修复
-
-```
-gulp w
-```

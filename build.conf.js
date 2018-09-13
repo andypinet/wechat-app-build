@@ -6,6 +6,10 @@ const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
+const RunAfterBuildPlugin = require('webpack-run-after-build-plugin')
+
+const exec = require('child_process').exec
+
 let config = {}
 // config.target = "web";
 config.workspaceroot = path.join(__dirname, 'src')
@@ -64,7 +68,17 @@ module.exports = {
         ],
         {}
       ),
-      new ExtractTextPlugin('app.wxss')
+      new ExtractTextPlugin('app.wxss'),
+      new RunAfterBuildPlugin(() => {
+        console.log('Files are ready to use!');
+        exec('gulp r', function(err, stdout, stderr) {
+          if (err) {
+            return err
+          }
+          console.log(stdout)
+          console.error(stderr)
+        })
+      })
     ],
     module: {
       rules: [

@@ -9,6 +9,11 @@
         </view>
         <view>computed: {{c}}</view>
         <test-c></test-c>
+
+        <div bindtap="onClickModal">open Modal</div>
+        <ui-modal show="{{showModal}}" height='60%' bindcancel="onModalCancel" bindconfirm='onModalConfirm'>
+          <view class='modal-content'>你自己的布局</view>
+        </ui-modal>
     </div>
 </template>
 
@@ -24,7 +29,8 @@ export default {
   data() {
     return {
       state: 'unload',
-      src: assets('banner1.png')
+      src: assets('banner1.png'),
+      showModal: false
     }
   },
   computed: {
@@ -44,7 +50,20 @@ export default {
     this.setData({
       state: 'loaded'
     })
+  },
+  // 操作modal
+  onClickModal() {
+    this.setData({
+      showModal: true
+    })
+  },
+  onModalCancel() {
+
+  },
+  onModalConfirm() {
+
   }
+  // end 操作modal
 }
 </script>
 
