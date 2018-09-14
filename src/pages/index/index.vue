@@ -1,6 +1,11 @@
 <template>
     <div>
         <view>测试文</view>
+        <ui-marquee>
+          <text slot="content">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>
+          <text slot="copy">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>
+        </ui-marquee>
+
         <view class="auc-image custom-style {{state}}">
             <view class="mask"></view>
             <image class="image"
