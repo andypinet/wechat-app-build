@@ -12,10 +12,6 @@
 </template>
 
 <script>
-let animation = wx.createAnimation({
-  duration: 1000
-})
-
 export default {
   options: {
     multipleSlots: true
