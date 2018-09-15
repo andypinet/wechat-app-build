@@ -4,7 +4,7 @@
       <view id="content" class="marquee_text">
         <slot name="content"></slot>
       </view>
-      <view class="marquee_text">
+      <view class="marquee_text" wx:if="{{useAnimation}}">
         <slot name="copy"></slot>
       </view>
     </view>
