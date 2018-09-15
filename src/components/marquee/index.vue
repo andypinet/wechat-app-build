@@ -91,14 +91,6 @@ export default {
 </script>
 
 <style lang="scss">
-@keyframes around {
-  from {
-    margin-left: 100%;
-  }
-  to {
-    margin-left: var(--marqueeWidth--); // var接受传入的变量
-  }
-}
 .marquee_container {
   position: relative;
 }
@@ -109,9 +101,5 @@ export default {
 .marquee_text {
   display: inline-block;
   white-space: nowrap;
-  // animation-name: around;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
 }
 </style>
