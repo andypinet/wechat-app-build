@@ -1,6 +1,10 @@
 <template>
     <div>
         <view>测试文</view>
+        <div>
+          <navigator url="/pages/scroll/index">IntersectionObserver</navigator>
+        </div>
+
         <ui-marquee>
           <text slot="content">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>
           <text slot="copy">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>

@@ -11,7 +11,7 @@
 		"newFeature": true,
 		"nodeModules": true
 	},
-	"miniprogramRoot": "./dist/",
+	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
 	"libVersion": "2.2.3",
 	"appid": "wx7b297debfe9acb05",
@@ -26,13 +26,23 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 0,
+			"list": [
+				{
+					"id": -1,
+					"name": "查看滚动",
+					"pathName": "pages/scroll/index"
+				}
+			]
 		}
 	}
 }
