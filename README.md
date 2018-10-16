@@ -69,14 +69,8 @@ npm install -g babel browserify webpack-cli
 npm set sass_binary_site https://cdn.npm.taobao.org/dist/node-sass
 ```
 
-### 编译小程序vue
+### 开发
 
 ```
 npm run dev
-```
-
-### 项目级
-
-```
-webpack
 ```

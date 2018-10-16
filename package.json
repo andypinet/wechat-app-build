@@ -5,7 +5,7 @@
   "main": "",
   "scripts": {
     "watch:mina": "node build.js",
-    "dev": "node build.js --watch",
+    "dev": "node dev.js",
     "build": "node build.js"
   },
   "repository": {
@@ -29,7 +29,7 @@
     "babel-preset-es2015-loose": "8.0.0",
     "bourbon": "^5.0.0",
     "cacheman": "^2.2.1",
-    "chalk": "^2.3.0",
+    "chalk": "^2.4.1",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -44,6 +44,7 @@
     "node-sass-package-importer": "^5.1.0",
     "node-watch": "^0.5.5",
     "ora": "^1.3.0",
+    "post-compile-webpack-plugin": "^0.1.2",
     "postcss": "^6.0.16",
     "postcss-icss-selectors": "^2.0.3",
     "postcss-js": "^1.0.1",
@@ -57,13 +58,10 @@
     "style-loader": "^0.22.1",
     "voca": "^1.4.0",
     "vue-parser": "^1.1.6",
-    "webpack": "^4.17.1",
+    "webpack": "^4.20.2",
     "webpack-replace-loader": "^1.3.0",
     "webpack-run-after-build-plugin": "0.0.1",
     "wepyk-api": "^0.1.63",
     "yargs": "^10.1.1"
-  },
-  "dependencies": {
-    "post-compile-webpack-plugin": "^0.1.2"
   }
 }

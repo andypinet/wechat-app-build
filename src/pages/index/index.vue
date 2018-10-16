@@ -1,29 +1,29 @@
 <template>
+  <div>
+    <view>测试文</view>
     <div>
-        <view>测试文</view>
-        <div>
-          <navigator url="/pages/scroll/index">IntersectionObserver</navigator>
-        </div>
-
-        <ui-marquee>
-          <text slot="content">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>
-          <text slot="copy">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>
-        </ui-marquee>
-
-        <view class="auc-image custom-style {{state}}">
-            <view class="mask"></view>
-            <image class="image"
-                    bind:load="onBindLoad"
-                    src="{{src}}" mode="widthFix"></image>
-        </view>
-        <view>computed: {{c}}</view>
-        <test-c></test-c>
-
-        <div bindtap="onClickModal">open Modal</div>
-        <ui-modal show="{{showModal}}" height='60%' bindcancel="onModalCancel" bindconfirm='onModalConfirm'>
-          <view class='modal-content'>你自己的布局</view>
-        </ui-modal>
+      <navigator url="/pages/scroll/index">IntersectionObserver</navigator>
     </div>
+
+    <ui-marquee>
+      <text slot="content">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>
+      <text slot="copy">hello worldcontentWidthcontentWidthcontentWidthcontentWidthcontentWidthcontentWidth</text>
+    </ui-marquee>
+
+    <view class="auc-image custom-style {{state}}">
+        <view class="mask"></view>
+        <image class="image"
+                bind:load="onBindLoad"
+                src="{{src}}" mode="widthFix"></image>
+    </view>
+    <view>computed: {{c}}</view>
+    <test-c></test-c>
+
+    <div bindtap="onClickModal">open Modal</div>
+    <ui-modal show="{{showModal}}" height='60%' bindcancel="onModalCancel" bindconfirm='onModalConfirm'>
+      <view class='modal-content'>你自己的布局</view>
+    </ui-modal>
+  </div>
 </template>
 
 <script>
