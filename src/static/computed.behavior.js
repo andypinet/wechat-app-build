@@ -1,6 +1,7 @@
 module.exports = Behavior({
   lifetimes: {
     created() {
+      this._computedCache = {}
       this._originalSetData = this.setData
       this.setData = this._setData
     }
@@ -8,13 +9,13 @@ module.exports = Behavior({
   definitionFilter(defFields) {
     const computed = defFields.computed || {}
     const computedKeys = Object.keys(computed)
-    const computedCache = {}
     let doingSetData = false
 
     // 计算 computed
     const calcComputed = (scope, insertToData) => {
       const needUpdate = {}
-      const data = (defFields.data = defFields.data || {})
+      const data = defFields.data = defFields.data || {}
+      const computedCache = scope._computedCache || scope.data
 
       for (let i = 0, len = computedKeys.length; i < len; i++) {
         const key = computedKeys[i]
@@ -50,12 +51,12 @@ module.exports = Behavior({
     initComputed()
 
     defFields.methods = defFields.methods || {}
-    defFields.methods._setData = function(data, callback) {
+    defFields.methods._setData = function (data, callback) {
       const originalSetData = this._originalSetData
 
       if (doingSetData) {
         // eslint-disable-next-line no-console
-        console.warn("can't call setData in computed getter function!")
+        console.warn('can\'t call setData in computed getter function!')
         return
       }
 
