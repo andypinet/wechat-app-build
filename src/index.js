@@ -1,4 +1,4 @@
-import './app.scss'
+import './app.less'
 
 import 'andy-aui/lib/global'
 

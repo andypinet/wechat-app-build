@@ -73,7 +73,7 @@ module.exports = {
       ),
       new ExtractTextPlugin('app.wxss'),
       new PostCompilePlugin(() => {
-        console.log('Files are ready to use!');
+        console.log('Files are ready to use!')
         exec('gulp r', function(err, stdout, stderr) {
           if (err) {
             return err
@@ -132,7 +132,7 @@ module.exports = {
           ]
         },
         {
-          test: /\.scss$/,
+          test: /\.less$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: [
@@ -147,14 +147,14 @@ module.exports = {
                 }
               },
               {
-                loader: 'sass-loader',
+                loader: 'less-loader',
                 options: {
                   sourceMap: true
                 }
               },
-              {
-                loader: 'postcss-loader'
-              }
+              // {
+              //   loader: 'postcss-loader'
+              // }
             ]
           })
         }
