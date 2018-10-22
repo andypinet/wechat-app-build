@@ -36,6 +36,7 @@ module.exports = {
   config: config,
   date: new Date(),
   webpackconfig: {
+    mode: 'none',
     entry: './src/index',
     output: {
       path: config.destroot,
@@ -99,9 +100,9 @@ module.exports = {
               options: {
                 presets: [
                   [
-                    'env',
+                    '@babel/preset-env',
                     {
-                      module: false,
+                      modules: false,
                       targets: {
                         browsers: ['iOS > 7']
                       }
@@ -109,16 +110,16 @@ module.exports = {
                   ]
                 ],
                 plugins: [
-                  ['transform-object-rest-spread'],
-                  ['transform-async-generator-functions'],
-                  [
-                    'transform-runtime',
-                    {
-                      helpers: false,
-                      polyfill: false,
-                      regenerator: false
-                    }
-                  ]
+                  // ['transform-object-rest-spread'],
+                  // ['transform-async-generator-functions'],
+                  // [
+                  //   'transform-runtime',
+                  //   {
+                  //     helpers: false,
+                  //     polyfill: false,
+                  //     regenerator: false
+                  //   }
+                  // ]
                 ]
               }
             },

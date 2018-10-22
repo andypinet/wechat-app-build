@@ -1,9 +1,9 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
-        "module": false,
+        "modules": "commonjs",
         "targets": {
           "browsers": ["iOS > 7"]
         }
@@ -11,15 +11,6 @@
     ]
   ],
   "plugins": [
-    ["transform-object-rest-spread"],
-    ["transform-async-generator-functions"],
-    [
-      "transform-runtime",
-      {
-        "helpers": false,
-        "polyfill": false,
-        "regenerator": false
-      }
-    ]
+
   ]
 }
