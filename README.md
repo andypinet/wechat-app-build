@@ -19,6 +19,9 @@
 生成的components js文件可以使用template/wxc.js改变
 生成的pages js文件可以使用template/wxp.js改变
 
+官方的库源
+https://github.com/wechat-miniprogram
+
 ### 特色
 
 默认的模板
