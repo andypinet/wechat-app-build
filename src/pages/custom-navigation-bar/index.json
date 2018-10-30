@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "navigation-bar": "miniprogram-navigation-bar"
+  },
+  "window": {
+    "navigationStyle": "custom"
+  }
+}

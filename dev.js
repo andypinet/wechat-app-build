@@ -2,6 +2,16 @@ const child_process = require('child_process')
 const chalk = require('chalk')
 const log = console.log
 
+const workerProcess = child_process.exec('gulp w', {})
+
+workerProcess.stdout.on('data', function (data) {
+  console.log(chalk.cyan(data))
+});
+
+workerProcess.stderr.on('data', function (data) {
+  console.error(chalk.error(data))
+});
+
 let devProcess = child_process.spawn(
   'node',
   ['build.js', '--watch'],

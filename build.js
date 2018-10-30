@@ -50,6 +50,9 @@ const utils = {
     }
   },
   readJson(path) {
+    if (!fs.existsSync(path)) {
+      throw new Error('no json file')
+    }
     return require(path)
   }
 }
@@ -509,3 +512,4 @@ if (argv.watch) {
 } else {
   spinner.stop()
 }
+

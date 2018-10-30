@@ -3,6 +3,7 @@
     <view>测试文</view>
     <div>
       <navigator url="/pages/scroll/index">IntersectionObserver</navigator>
+      <navigator url="/pages/custom-navigation-bar/index">custom-navigation-bar</navigator>
     </div>
 
     <ui-marquee>
