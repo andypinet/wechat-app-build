@@ -49,7 +49,14 @@ Page, Component
 - 提供$set方法  提供`$set(key, value)`模式
 - Page 提供mixins  component暂时无法实现
 
+### 结构
+
+![](./doc/Screenshot.png)
+
+1.  _package.json对应小程序目录里的package.json 支持动态修改 但不会去执行npm install
+
 ### 不同的
+
 1. require是小程序的函数 不翻译
 2. import语句只支持node_modules引入
 3. sass也不支持相对路径
