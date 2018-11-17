@@ -13,6 +13,11 @@ import Watch from '../../static/watch';
 let watch;
 let pageDefine = @{js};
 let page = pageDefine.default;
+if (!page.data) {
+  page.data = function() {
+    return {}
+  }
+}
 page.data = page.data();
 let _pegeDef = createPage(page)
 Page({

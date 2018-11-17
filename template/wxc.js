@@ -10,6 +10,11 @@ const globalValidate = require('../../static/validate.js');
 const computedBehavior = require('../../static/computed.behavior.js');
 let componentDefine = @{js};
 let component = componentDefine.default;
+if (!component.data) {
+  component.data = function() {
+    return {}
+  }
+}
 component.data = component.data();
 if (!component.behaviors) {
   component.behaviors = []
