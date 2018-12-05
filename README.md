@@ -97,3 +97,10 @@ npm run dev
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "6.24.1",
 ```
+
+### webstorm
+
+解决webstorm rpx问题
+![](./doc/sed.png)
+
+https://mzz.pub/2018/06/15/tools/rpx/

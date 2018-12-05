@@ -9,7 +9,7 @@ workerProcess.stdout.on('data', function (data) {
 });
 
 workerProcess.stderr.on('data', function (data) {
-  console.error(chalk.error(data))
+  console.error(chalk.red(data))
 });
 
 let devProcess = child_process.spawn(

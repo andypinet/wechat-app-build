@@ -5,3 +5,4 @@ tmp-*
 tmp/
 dist
 debug/
+project.config.json
