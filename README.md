@@ -71,6 +71,7 @@ npm install
 
 ```
 npm install -g babel browserify webpack-cli
+npm install -g less
 ```
 
 关于 node-sass
