@@ -18,6 +18,17 @@ gulp.task('r', function() {
     .pipe(gulp.dest('./dist'))
 })
 
+gulp.task('i', function () {
+  gulp
+    .src('./src/_package.json')
+    .pipe(
+      rename(function(p) {
+        p.basename = 'package'
+      })
+    )
+    .pipe(gulp.dest('./dist'))
+})
+
 gulp.task('w', function() {
   console.log('start gulp watch')
   gulp

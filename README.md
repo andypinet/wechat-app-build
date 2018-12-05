@@ -86,17 +86,23 @@ npm set sass_binary_site https://cdn.npm.taobao.org/dist/node-sass
 npm run dev
 ```
 
+小程序更新npm
+
+```
+install:npm
+```
+
 不再使用babel6
 ```
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-async-generator-functions": "^6.24.1",
-    "babel-plugin-transform-custom-element-classes": "^0.1.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "6.24.1",
+"babel-cli": "^6.26.0",
+"babel-core": "^6.26.0",
+"babel-loader": "^7.1.2",
+"babel-plugin-transform-async-generator-functions": "^6.24.1",
+"babel-plugin-transform-custom-element-classes": "^0.1.0",
+"babel-plugin-transform-object-rest-spread": "^6.26.0",
+"babel-plugin-transform-runtime": "^6.23.0",
+"babel-preset-env": "^1.6.1",
+"babel-preset-es2015": "6.24.1",
 ```
 
 ### webstorm
