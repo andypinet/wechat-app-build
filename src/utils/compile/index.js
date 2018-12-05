@@ -1,6 +1,6 @@
 const _config = require('../../static/config')
 
-import Flyio from 'flyio/dist/npm/wx'
+import Flyio from './flyio/dist/npm/wx'
 const flyio = new Flyio()
 
 import { Request } from 'wepyk-api/lib/utils'
