@@ -2,7 +2,8 @@
     "pages": [
         "pages/index/index",
         "pages/scroll/index",
-        "pages/vantapp/index"
+        "pages/vantapp/index",
+        "pages/form/index"
     ],
     "window": {
         "navigationBarBackgroundColor": "#000",
@@ -11,6 +12,7 @@
         "navigationStyle": "default"
     },
     "usingComponents": {
-      "van-button": "/miniprogram_npm/vant-weapp/button/index"
+      "van-button": "/miniprogram_npm/vant-weapp/button/index",
+      "mt-form": "/components/mt-form/index"
     }
 }

@@ -6,7 +6,7 @@ const globalValidate = require('./static/validate.js');
 
 function createApp(def) {
   let ret = {
-    ...def
+    ...def,
   }
   ret.onLaunch = function(options) {
     this.$appOptions = {

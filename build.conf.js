@@ -59,6 +59,11 @@ module.exports = {
             to: './static'
           },
           {
+            context: './src/behaviors',
+            from: '**/*',
+            to: './behaviors'
+          },
+          {
             context: './src/pages',
             from: '**/*.json',
             to: './pages'

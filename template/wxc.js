@@ -20,6 +20,10 @@ if (!component.behaviors) {
   component.behaviors = []
 }
 component.behaviors = component.behaviors.concat([computedBehavior])
+component.options = Object.assign({
+  addGlobalClass: true,
+  multipleSlots: true
+}, component.options)
 Component({
   ...{},
   ...component,

@@ -355,12 +355,12 @@ function handleVue(evt, filepath) {
                     $IS: ${ret.$is};
                 ` + myStyleContents
 
-                diffchange(
-                  path.join(folder, '/index.wxss'),
-                  Buffer.from(myStyleContents),
-                  xmlcache
-                ).then(function(isChange) {
-                  if (isChange !== 'unchange') {
+                // diffchange(
+                //   path.join(folder, '/index.wxss'),
+                //   Buffer.from(myStyleContents),
+                //   xmlcache
+                // ).then(function(isChange) {
+                //   if (isChange !== 'unchange') {
                     const compiledStyle = sass.renderSync({
                       data: myStyleContents,
                       importer: packageImporter({}),
@@ -414,22 +414,22 @@ function handleVue(evt, filepath) {
 
                         myTemplateContents = traux(myTemplateContents)
 
-                        diffchange(
-                          path.join(folder, '/index.wxml'),
-                          Buffer.from(myTemplateContents),
-                          xmlcache
-                        ).then(function(isChange) {
-                          if (isChange === 'change') {
-                          }
-
-                          if (isscoped) {
-                            for (let key in scopedcss) {
-                              myTemplateContents = myTemplateContents.replace(
-                                new RegExp(`class="${key}`, 'g'),
-                                'class="' + scopedcss[key]
-                              )
-                            }
-                          }
+                        // diffchange(
+                        //   path.join(folder, '/index.wxml'),
+                        //   Buffer.from(myTemplateContents),
+                        //   xmlcache
+                        // ).then(function(isChange) {
+                        //   if (isChange === 'change') {
+                        //   }
+                        //
+                        //   if (isscoped) {
+                        //     for (let key in scopedcss) {
+                        //       myTemplateContents = myTemplateContents.replace(
+                        //         new RegExp(`class="${key}`, 'g'),
+                        //         'class="' + scopedcss[key]
+                        //       )
+                        //     }
+                        //   }
 
                           // 处理div
                           myTemplateContents = myTemplateContents.replace(/(<\s*\/?\s*)div(\s*([^>]*)?\s*>)/g, '$1view$2')
@@ -438,15 +438,15 @@ function handleVue(evt, filepath) {
                             path.join(destroot, '/index.wxml'),
                             myTemplateContents
                           )
-                        })
+                        // })
 
                         fse.outputFileSync(
                           path.join(destroot, '/index.wxss'),
                           result.css
                         )
                       })
-                  }
-                })
+                  // }
+                // })
               })
               .catch(e => {
                 console.error(e)
