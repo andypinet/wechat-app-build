@@ -431,6 +431,9 @@ function handleVue(evt, filepath) {
                             }
                           }
 
+                          // 处理div
+                          myTemplateContents = myTemplateContents.replace(/(<\s*\/?\s*)div(\s*([^>]*)?\s*>)/g, '$1view$2')
+
                           fse.outputFileSync(
                             path.join(destroot, '/index.wxml'),
                             myTemplateContents
