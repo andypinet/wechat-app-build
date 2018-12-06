@@ -216,235 +216,246 @@ function handleVue(evt, filepath) {
     if (filename.endsWith('.vue')) {
       let comfolder = paths.slice(0, paths.length - 1).join(path.sep)
       let jsonPath = path.join(comfolder, 'index.json')
-      let componentJson = utils.readJson(jsonPath)
-      let destfolder = folder.replace(projectconfig.config.workspaceroot, '')
-      let packagename = paths[paths.length - 2]
-      let tmpfolder = paths
-        .slice(paths.length - 3, paths.length - 1)
-        .join(path.sep)
       try {
-        let filecontent = utils.readFile(filepath).toString()
-        let destroot = path.join(projectconfig.config.destroot, destfolder)
-        if (filecontent) {
-          console.log(chalk.cyan('build package ' + filepath))
+        let componentJson = utils.readJson(jsonPath)
+        let destfolder = folder.replace(projectconfig.config.workspaceroot, '')
+        let packagename = paths[paths.length - 2]
+        let tmpfolder = paths
+          .slice(paths.length - 3, paths.length - 1)
+          .join(path.sep)
+        try {
+          let filecontent = utils.readFile(filepath).toString()
+          let destroot = path.join(projectconfig.config.destroot, destfolder)
+          if (filecontent) {
+            console.log(chalk.cyan('build package ' + filepath))
 
-          filecontent = filecontent.replace('<script>', '<script lang="js">')
+            filecontent = filecontent.replace('<script>', '<script lang="js">')
 
-          let myScriptContents = vueParser.parse(filecontent, 'script', {
-            lang: ['js']
-          })
+            let myScriptContents = vueParser.parse(filecontent, 'script', {
+              lang: ['js']
+            })
 
-          myScriptContents = myScriptContents.replace(
-            /require\([\w-\s.\/'"]+\)/g,
-            function(match) {
-              return match.replace('require', 'WXREQUIRE')
-            }
-          )
-
-          let tmppath = path.join(
-            folder,
-            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.js`
-          )
-          let tmpcompilepath = path.join(
-            folder,
-            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.compile.js`
-          )
-          let tmpbundlepath = path.join(
-            folder,
-            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.bundle.js`
-          )
-          let tmpminpath = path.join(
-            folder,
-            `../../../${TMPFOLDERNAME}/${tmpfolder}/index.min.js`
-          )
-          let destscriptpath = path.join(
-            projectconfig.config.destroot,
-            `/${tmpfolder}/index.js`
-          )
-          let mainjspath = path.join(
-            projectconfig.config.destroot,
-            `/${tmpfolder}/main.js`
-          )
-
-          // 确保目录存在
-          fse.ensureDirSync(destroot)
-
-          myScriptContents = myScriptContents
-            .replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '')
-            .trim()
-
-          fse.outputFileSync(tmppath, myScriptContents)
-
-          let filebasename = filename.replace(/.vue$/, '')
-
-          // 先确保有文件
-          fse.ensureFileSync(
-            path.join(projectconfig.config.destroot, `/${tmpfolder}/index.js`)
-          )
-
-          let scoped
-          css = {}
-
-          let ret = {}
-          ret.$is = paths[paths.length - 2]
-
-          let constants = {
-            '%=IS%': ret.$is
-          }
-
-          compile(tmppath, tmpcompilepath, {
-            bundle: tmpbundlepath
-          }).then(function() {
-            // fse.copySync(tmpcompilepath, destscriptpath);
-
-            let compilejs = fs.readFileSync(tmpbundlepath).toString()
-
-            compilejs = compilejs.replace(
-              /WXREQUIRE\([\w-\s.\/'"]+\)/g,
+            myScriptContents = myScriptContents.replace(
+              /require\([\w-\s.\/'"]+\)/g,
               function(match) {
-                return match.replace('WXREQUIRE', 'require')
+                return match.replace('require', 'WXREQUIRE')
               }
             )
 
-            if (componentJson.component) {
-              const temlpateModule = require(path.join(
-                __dirname,
-                './template/wxc.js'
-              ))
+            let tmppath = path.join(
+              folder,
+              `../../../${TMPFOLDERNAME}/${tmpfolder}/index.js`
+            )
+            let tmpcompilepath = path.join(
+              folder,
+              `../../../${TMPFOLDERNAME}/${tmpfolder}/index.compile.js`
+            )
+            let tmpbundlepath = path.join(
+              folder,
+              `../../../${TMPFOLDERNAME}/${tmpfolder}/index.bundle.js`
+            )
+            let tmpminpath = path.join(
+              folder,
+              `../../../${TMPFOLDERNAME}/${tmpfolder}/index.min.js`
+            )
+            let destscriptpath = path.join(
+              projectconfig.config.destroot,
+              `/${tmpfolder}/index.js`
+            )
+            let mainjspath = path.join(
+              projectconfig.config.destroot,
+              `/${tmpfolder}/main.js`
+            )
 
-              let wxp = wxptemplate(
-                temlpateModule.tpl,
-                `require('./main.js')`,
-                '//@end'
-              )
-              fse.outputFileSync(destscriptpath, wxp)
-              fse.outputFileSync(
-                mainjspath,
-                `${temlpateModule.bef}${compilejs}`
-              )
-            } else {
-              const temlpateModule = require(path.join(
-                __dirname,
-                './template/wxp.js'
-              ))
+            // 确保目录存在
+            fse.ensureDirSync(destroot)
 
-              let wxp = wxptemplate(
-                temlpateModule.tpl,
-                `require('./main.js')`,
-                '//@end'
-              )
-              fse.outputFileSync(destscriptpath, wxp)
-              fse.outputFileSync(
-                mainjspath,
-                `${temlpateModule.bef}${compilejs}`
-              )
-            }
-
-            scopedcss = {}
-
-            let myStyleContents = vueParser
-              .parse(filecontent, 'style', { lang: ['scss'] })
-              .replace('tslint:enable', '')
-              .replace('tslint:disable', '')
+            myScriptContents = myScriptContents
+              .replace(/^\/\/\stslint:disable[\w\s\n\/]* tslint:enable/g, '')
               .trim()
 
-            myStyleContents =
-              `
+            fse.outputFileSync(tmppath, myScriptContents)
+
+            let filebasename = filename.replace(/.vue$/, '')
+
+            // 先确保有文件
+            fse.ensureFileSync(
+              path.join(projectconfig.config.destroot, `/${tmpfolder}/index.js`)
+            )
+
+            let scoped
+            css = {}
+
+            let ret = {}
+            ret.$is = paths[paths.length - 2]
+
+            let constants = {
+              '%=IS%': ret.$is
+            }
+
+            compile(tmppath, tmpcompilepath, {
+              bundle: tmpbundlepath
+            })
+              .then(function() {
+                // fse.copySync(tmpcompilepath, destscriptpath);
+
+                let compilejs = fs.readFileSync(tmpbundlepath).toString()
+
+                compilejs = compilejs.replace(
+                  /WXREQUIRE\([\w-\s.\/'"]+\)/g,
+                  function(match) {
+                    return match.replace('WXREQUIRE', 'require')
+                  }
+                )
+
+                if (componentJson.component) {
+                  const temlpateModule = require(path.join(
+                    __dirname,
+                    './template/wxc.js'
+                  ))
+
+                  let wxp = wxptemplate(
+                    temlpateModule.tpl,
+                    `require('./main.js')`,
+                    '//@end'
+                  )
+                  fse.outputFileSync(destscriptpath, wxp)
+                  fse.outputFileSync(
+                    mainjspath,
+                    `${temlpateModule.bef}${compilejs}`
+                  )
+                } else {
+                  const temlpateModule = require(path.join(
+                    __dirname,
+                    './template/wxp.js'
+                  ))
+
+                  let wxp = wxptemplate(
+                    temlpateModule.tpl,
+                    `require('./main.js')`,
+                    '//@end'
+                  )
+                  fse.outputFileSync(destscriptpath, wxp)
+                  fse.outputFileSync(
+                    mainjspath,
+                    `${temlpateModule.bef}${compilejs}`
+                  )
+                }
+
+                scopedcss = {}
+
+                let myStyleContents = vueParser
+                  .parse(filecontent, 'style', { lang: ['scss'] })
+                  .replace('tslint:enable', '')
+                  .replace('tslint:disable', '')
+                  .trim()
+
+                myStyleContents =
+                  `
                     $IS: ${ret.$is};
                 ` + myStyleContents
 
-            diffchange(
-              path.join(folder, '/index.wxss'),
-              Buffer.from(myStyleContents),
-              xmlcache
-            ).then(function(isChange) {
-              if (isChange !== 'unchange') {
-                const compiledStyle = sass.renderSync({
-                  data: myStyleContents,
-                  importer: packageImporter({}),
-                  includePaths: [folder],
-                  functions: {}
-                })
-
-                let exportcss = /(:export[\s]*{)([^}]*)(})/g
-
-                let isscoped = false
-                if (/<style.*scoped>/g.test(filecontent)) {
-                  isscoped = true
-                } else {
-                }
-
-                let postcssmodules = []
-
-                if (isscoped) {
-                  postcssmodules.push(cssmodules({}))
-                }
-
-                postcss(postcssmodules)
-                  .process(compiledStyle.css, { map: false })
-                  .then(result => {
-                    if (isscoped) {
-                      result.css.replace(exportcss, function(
-                        match,
-                        $1,
-                        $2,
-                        $3
-                      ) {
-                        $2.trim()
-                          .split(';')
-                          .forEach(function(v) {
-                            let s = v.trim().split(':')
-                            if (s.length > 1) {
-                              scopedcss[s[0].trim()] = s[1].trim()
-                            }
-                          })
-                      })
-
-                      result.css = result.css.replace(exportcss, '')
-                    }
-
-                    let myTemplateContents = vueParser
-                      .parse(filecontent, 'template', {})
-                      .replace('//////////', '')
-                      .trim()
-
-                    myTemplateContents = v.tr(myTemplateContents, constants)
-
-                    myTemplateContents = traux(myTemplateContents)
-
-                    diffchange(
-                      path.join(folder, '/index.wxml'),
-                      Buffer.from(myTemplateContents),
-                      xmlcache
-                    ).then(function(isChange) {
-                      if (isChange === 'change') {
-                      }
-
-                      if (isscoped) {
-                        for (let key in scopedcss) {
-                          myTemplateContents = myTemplateContents.replace(
-                            new RegExp(`class="${key}`, 'g'),
-                            'class="' + scopedcss[key]
-                          )
-                        }
-                      }
-
-                      fse.outputFileSync(
-                        path.join(destroot, '/index.wxml'),
-                        myTemplateContents
-                      )
+                diffchange(
+                  path.join(folder, '/index.wxss'),
+                  Buffer.from(myStyleContents),
+                  xmlcache
+                ).then(function(isChange) {
+                  if (isChange !== 'unchange') {
+                    const compiledStyle = sass.renderSync({
+                      data: myStyleContents,
+                      importer: packageImporter({}),
+                      includePaths: [folder],
+                      functions: {}
                     })
 
-                    fse.outputFileSync(
-                      path.join(destroot, '/index.wxss'),
-                      result.css
-                    )
-                  })
-              }
-            })
-          })
+                    let exportcss = /(:export[\s]*{)([^}]*)(})/g
+
+                    let isscoped = false
+                    if (/<style.*scoped>/g.test(filecontent)) {
+                      isscoped = true
+                    } else {
+                    }
+
+                    let postcssmodules = []
+
+                    if (isscoped) {
+                      postcssmodules.push(cssmodules({}))
+                    }
+
+                    postcss(postcssmodules)
+                      .process(compiledStyle.css, { map: false })
+                      .then(result => {
+                        if (isscoped) {
+                          result.css.replace(exportcss, function(
+                            match,
+                            $1,
+                            $2,
+                            $3
+                          ) {
+                            $2.trim()
+                              .split(';')
+                              .forEach(function(v) {
+                                let s = v.trim().split(':')
+                                if (s.length > 1) {
+                                  scopedcss[s[0].trim()] = s[1].trim()
+                                }
+                              })
+                          })
+
+                          result.css = result.css.replace(exportcss, '')
+                        }
+
+                        let myTemplateContents = vueParser
+                          .parse(filecontent, 'template', {})
+                          .replace('//////////', '')
+                          .trim()
+
+                        myTemplateContents = v.tr(myTemplateContents, constants)
+
+                        myTemplateContents = traux(myTemplateContents)
+
+                        diffchange(
+                          path.join(folder, '/index.wxml'),
+                          Buffer.from(myTemplateContents),
+                          xmlcache
+                        ).then(function(isChange) {
+                          if (isChange === 'change') {
+                          }
+
+                          if (isscoped) {
+                            for (let key in scopedcss) {
+                              myTemplateContents = myTemplateContents.replace(
+                                new RegExp(`class="${key}`, 'g'),
+                                'class="' + scopedcss[key]
+                              )
+                            }
+                          }
+
+                          fse.outputFileSync(
+                            path.join(destroot, '/index.wxml'),
+                            myTemplateContents
+                          )
+                        })
+
+                        fse.outputFileSync(
+                          path.join(destroot, '/index.wxss'),
+                          result.css
+                        )
+                      })
+                  }
+                })
+              })
+              .catch(e => {
+                console.error(e)
+              })
+          }
+        } catch (e) {
+          console.error(e)
         }
-      } catch (e) {}
+        // end readJson
+      } catch(e) {
+        console.error(`readJson failed`, e)
+      }
     }
   }
 }

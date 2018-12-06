@@ -1,12 +1,16 @@
 {
     "pages": [
         "pages/index/index",
-        "pages/scroll/index"
+        "pages/scroll/index",
+        "pages/vantapp/index"
     ],
     "window": {
         "navigationBarBackgroundColor": "#000",
         "navigationBarTitleText": "WeChat",
         "navigationBarTextStyle": "white",
         "navigationStyle": "default"
+    },
+    "usingComponents": {
+      "van-button": "/miniprogram_npm/vant-weapp/button/index"
     }
 }
