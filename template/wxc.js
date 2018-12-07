@@ -9,6 +9,7 @@ const globalUtils = require('../../utils/compile/index.js');
 const globalVariable = require('../../static/variable.js');
 const globalInterface = require('../../static/interface.js');
 const wxe = globalUtils.wx;
+const globalReg = globalUtils.reg;
 `,
   tpl: `
 const computedBehavior = require('../../static/computed.behavior.js');

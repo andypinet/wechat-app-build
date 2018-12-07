@@ -35,7 +35,6 @@ module.exports = Behavior({
   },
   lifetimes: {
     attached: function () {
-      console.log('attached mt')
     },
   },
   methods: {

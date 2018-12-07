@@ -47,7 +47,6 @@ class CommonRequest extends Request {
   }
 }
 
-
 export function initRequest() {
   return new CommonRequest(flyio, {
     base: _config.api,
@@ -66,5 +65,33 @@ _wx.checkSetting = function (key) {
   })
 }
 
-
 export let wx = _wx
+
+let _reg = {}
+_reg.stringType = function(opt) {
+  let d = {
+    type: "string",
+    required: true
+  }
+  return {
+    ...d,
+    ...opt
+  }
+}
+_reg.isOnlyHasNum = function (message = 'only can has num') {
+  return {
+    pattern: /^[0-9]+$/,
+    message: 'only can has num ',
+  }
+}
+_reg.isPhone = function (message = 'invalid phone') {
+  return [
+    _reg.isOnlyHasNum(),
+    {
+      len: 11,
+      message
+    },
+  ]
+}
+
+export let reg = _reg
