@@ -4,6 +4,10 @@ import 'andy-aui/lib/global'
 
 import schema from 'async-validator'
 
+console.d = function(...args) {
+  console.log.apply(console, args)
+}
+
 createApp({
   async onShow() {
     console.log(this)

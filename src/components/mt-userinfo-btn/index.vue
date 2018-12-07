@@ -20,6 +20,7 @@
     },
     methods: {
       onGetUserInfo(e) {
+        console.d(e)
         let detail = e.detail || {}
         if (detail.errMsg && detail.errMsg.indexOf('fail') > -1) {
           this.$emit('reject', {
