@@ -14,3 +14,7 @@ triggerEvent别名
 
 #### checkSetting(key) => Promise{detail}
 检测wx某个setting是否存在
+
+```javascript
+wxe.checkSetting('userInfo')
+```
