@@ -9,6 +9,13 @@
 </template>
 
 <script>
+  // wxp.getSetting().then(res => {
+  //   let hasUserInfoScope = res.authSetting[globalVariable.AuthSetting.userInfo]
+  //   console.log(hasUserInfoScope)
+  // })
+
+  wxe.checkSetting('userInfo')
+
   export default {
     data() {
       return {}

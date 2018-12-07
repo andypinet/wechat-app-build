@@ -6,6 +6,9 @@ const regeneratorRuntime = require('../../static/runtime.js');
 const globalMixins = require('../../static/mixins.js');
 const globalValidate = require('../../static/validate.js');
 const globalUtils = require('../../utils/compile/index.js');
+const globalVariable = require('../../static/variable.js');
+const globalInterface = require('../../static/interface.js');
+const wxe = globalUtils.wx;
 `,
   tpl: `
 const createPage = require('../../static/createpage.js');

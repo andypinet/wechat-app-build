@@ -6,7 +6,9 @@
   "scripts": {
     "install:npm": "gulp i && cd dist && npm i",
     "dev": "node dev.js",
-    "build": "node build.js && node webpack.dev.js --b && npm run install:npm"
+    "build": "node build.js && node webpack.dev.js --b && npm run install:npm",
+    "doc:index": "docute --port 3030  ./doc/index ",
+    "test": ""
   },
   "repository": {
     "type": "git",

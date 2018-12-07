@@ -112,3 +112,9 @@ install:npm
 ![](./doc/sed.png)
 
 https://mzz.pub/2018/06/15/tools/rpx/
+
+### doc
+
+```bash
+npm i docute-cli -g
+```

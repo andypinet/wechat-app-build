@@ -21,6 +21,12 @@
     methods: {
       onGetUserInfo(e) {
         let detail = e.detail || {}
+        if (detail.errMsg && detail.errMsg.indexOf('fail') > -1) {
+          this.$emit('reject', {
+            e
+          })
+          return
+        }
         this.$emit('approve', {
           detail,
           e

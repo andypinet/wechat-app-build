@@ -57,19 +57,25 @@ const utils = {
   }
 }
 
-const TMPFOLDERNAME = 'tmp'
+function parseWatchOptions(evt, filepath) {
+  let paths = filepath.split(path.sep)
+  let filename = paths[paths.length - 1]
+  let folder = paths
+    .filter(function(v, index) {
+      if (index === paths.length - 1) {
+        return false
+      }
+      return true
+    })
+    .join(path.sep)
+  return {
+    paths,
+    filename,
+    folder
+  }
+}
 
-// if (argv.watch) {
-//     projectconfig.webpackconfig.watch = true;
-// } else {
-//     // projectconfig.webpackconfig.plugins.push( new webpack.optimize.UglifyJsPlugin({
-//     // }))
-// }
-//
-// if (argv.uglify) {
-//     projectconfig.webpackconfig.plugins.push( new webpack.optimize.UglifyJsPlugin({
-//     }))
-// }
+const TMPFOLDERNAME = 'tmp'
 
 function compile(filepath, destpath, options = {}) {
   let cwd = `npx babel ${filepath} --out-file ${destpath} && browserify  ${destpath} -s NameOfModule --outfile ${
@@ -202,16 +208,7 @@ let wxptemplate = function(tpl, js, after = '') {
 }
 
 function handleVue(evt, filepath) {
-  let paths = filepath.split(path.sep)
-  let filename = paths[paths.length - 1]
-  let folder = paths
-    .filter(function(v, index) {
-      if (index === paths.length - 1) {
-        return false
-      }
-      return true
-    })
-    .join(path.sep)
+  let { paths, filename, folder } = parseWatchOptions(evt, filepath)
   if (filepath.indexOf('___jb_') < 0) {
     if (filename.endsWith('.vue')) {
       let comfolder = paths.slice(0, paths.length - 1).join(path.sep)
@@ -523,6 +520,16 @@ spinner.start()
 
 if (argv.watch) {
   watch(projectconfig.config.wxproot, { recursive: true }, handleVue)
+
+  watch(projectconfig.config.utilsproot, { recursive: true }, function (evt, filepath) {
+    let { paths, filename, folder } = parseWatchOptions(evt, filepath)
+    if (filepath.indexOf('___jb_') < 0) {
+      if (filename.endsWith('.js')) {
+        console.info(`${filename} changed  compile `)
+        compileUtils('index')
+      }
+    }
+  })
 } else {
   spinner.stop()
 }
