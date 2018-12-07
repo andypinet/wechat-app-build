@@ -35,6 +35,7 @@ Component({
         this.setData(args[0], args[1])
       }
     }
+    this.$emit = this.triggerEvent
     component.attached && component.attached.apply(this, ...args)
   }
 })

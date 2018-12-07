@@ -3,7 +3,8 @@
         "pages/index/index",
         "pages/scroll/index",
         "pages/vantapp/index",
-        "pages/form/index"
+        "pages/form/index",
+        "pages/landpage/index"
     ],
     "window": {
         "navigationBarBackgroundColor": "#000",
@@ -13,6 +14,7 @@
     },
     "usingComponents": {
       "van-button": "/miniprogram_npm/vant-weapp/button/index",
-      "mt-form": "/components/mt-form/index"
+      "mt-form": "/components/mt-form/index",
+      "mt-userinfo-btn": "/components/mt-userinfo-btn/index"
     }
 }

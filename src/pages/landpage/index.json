@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "test-c": "/components/c/index",
+    "ui-modal": "/components/modal/index",
+    "ui-marquee": "/components/marquee/index"
+  }
+}
+

@@ -25,6 +25,7 @@ Page({
     watch: {}
   },
   ..._pegeDef,
+  ..._pegeDef.methods,
   onLoad(...options) {
     let self = this
     watch = new Watch(this)
@@ -66,6 +67,7 @@ Page({
         this.setData(args[0], args[1])
       }
     }
+    this.$emit = this.triggerEvent
     _pegeDef.onLoad && _pegeDef.onLoad.apply(this, ...options)
   }
 })
