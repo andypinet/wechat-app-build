@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "miniprogram-navigation-bar": "0.0.4",
-    "vant-weapp": "^0.4.8"
+    "vant-weapp": "^0.4.9"
   }
 }

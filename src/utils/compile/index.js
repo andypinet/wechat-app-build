@@ -54,6 +54,13 @@ export function initRequest() {
 }
 
 let _wx = {}
+
+/**
+ * 检测某个setting是否授权过
+ *
+ * @param key
+ * @returns {Promise<any>}
+ */
 _wx.checkSetting = function (key) {
   return new Promise(resolve => {
     wxp.getSetting().then(res => {
@@ -62,6 +69,25 @@ _wx.checkSetting = function (key) {
         detail: ret
       })
     })
+  })
+}
+
+/**
+ * showToast
+ *
+ * @param title
+ * @param icon
+ * @param d
+ */
+_wx.showToast = function (title, icon = 'none', d = {}) {
+  let opt = {
+    title,
+    icon,
+    duration: 2000
+  }
+  wx.showToast({
+    ...opt,
+    ...d
   })
 }
 

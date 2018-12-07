@@ -18,3 +18,17 @@ triggerEvent别名
 ```javascript
 wxe.checkSetting('userInfo')
 ```
+
+#### showToast(title, icon = 'none', d = {}) => Void
+显示一个toast
+
+## globalReg
+
+### stringType
+### isOnlyHasNum
+### isPhone
+
+## globalUtils
+## globalVariable
+## globalInterface
+## globalMixins
