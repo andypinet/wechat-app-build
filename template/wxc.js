@@ -3,6 +3,7 @@ module.exports = {
 const app = getApp()
 const wxp = require('../../static/wx.promise.js').default
 const regeneratorRuntime = require('../../static/runtime.js');
+const wxpage = require('../../static/wxpage.js');
 const globalMixins = require('../../static/mixins.js');
 const globalValidate = require('../../static/validate.js');
 const globalUtils = require('../../utils/compile/index.js');
@@ -29,25 +30,25 @@ component.options = Object.assign({
   addGlobalClass: true,
   multipleSlots: true
 }, component.options)
-Component({
+Component.C({
   ...{},
   ...component,
   attached(...args) {
-    this.$set = function(...args) {
-      if (args.length == 1) {
-        this.setData(args[0])
-      } else if (args.length == 2) {
-        this.setData(args[0], args[1])
-      }
-    }
-    this.$emit = this.triggerEvent
-    this.$back = function(p = {}) {
-      if (globalUtils.isNumeric(p)) {
-         p = { delta: p }
-      }
-      if (!p.delta) { p.delta = 1 }
-      return wx.navigateBack(p)
-    }
+    // this.$set = function(...args) {
+    //   if (args.length == 1) {
+    //     this.setData(args[0])
+    //   } else if (args.length == 2) {
+    //     this.setData(args[0], args[1])
+    //   }
+    // }
+    // this.$emit = this.triggerEvent
+    // this.$back = function(p = {}) {
+    //   if (globalUtils.isNumeric(p)) {
+    //      p = { delta: p }
+    //   }
+    //   if (!p.delta) { p.delta = 1 }
+    //   return wx.navigateBack(p)
+    // }
     component.attached && component.attached.apply(this, ...args)
   }
 })

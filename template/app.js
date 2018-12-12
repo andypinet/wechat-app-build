@@ -5,9 +5,13 @@ const wxp = require('./static/wx.promise.js').default;
 const globalValidate = require('./static/validate.js');
 const globalVariable = require('./static/variable.js');
 const globalInterface = require('./static/interface.js');
+const wxpage = require('./static/wxpage.js');
 
 function createApp(def) {
   let ret = {
+    config: {
+      route: '/pages/$page'   // $page 会被替换成页面名
+    },
     ...def,
   }
   ret.onLaunch = function(options) {
@@ -24,7 +28,7 @@ function createApp(def) {
     }
     def.onShow && def.onShow.call(this, options)
   }
-  App(ret)
+  wxpage.A(ret)
 }
 
   `

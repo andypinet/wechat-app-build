@@ -34,6 +34,8 @@ https://github.com/wechat-miniprogram
 
 App
 
+使用腾讯视频出品的[wxpage](https://github.com/tvfe/wxpage)
+
 onLaunch
 
 - $systemInfo

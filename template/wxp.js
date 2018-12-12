@@ -2,6 +2,7 @@ module.exports = {
   bef: `
 const app = getApp()
 const wxp = require('../../static/wx.promise.js').default
+const wxpage = require('../../static/wxpage.js');
 const regeneratorRuntime = require('../../static/runtime.js');
 const globalMixins = require('../../static/mixins.js');
 const globalValidate = require('../../static/validate.js');
@@ -24,7 +25,7 @@ if (!page.data) {
 }
 page.data = page.data();
 let _pegeDef = createPage(page)
-Page({
+Page.P({
   ...{
     watch: {}
   },
@@ -64,21 +65,21 @@ Page({
 
       return watch.setData(d)
     }
-    this.$set = function(...args) {
-      if (args.length == 1) {
-        this.setData(args[0])
-      } else if (args.length == 2) {
-        this.setData(args[0], args[1])
-      }
-    }
-    this.$emit = this.triggerEvent
-    this.$back = function(p = {}) {
-      if (globalUtils.isNumeric(p)) {
-         p = { delta: p }
-      }
-      if (!p.delta) { p.delta = 1 }
-      return wx.navigateBack(p)
-    }
+    // this.$set = function(...args) {
+    //   if (args.length == 1) {
+    //     this.setData(args[0])
+    //   } else if (args.length == 2) {
+    //     this.setData(args[0], args[1])
+    //   }
+    // }
+    // this.$emit = this.triggerEvent
+    // this.$back = function(p = {}) {
+    //   if (globalUtils.isNumeric(p)) {
+    //      p = { delta: p }
+    //   }
+    //   if (!p.delta) { p.delta = 1 }
+    //   return wx.navigateBack(p)
+    // }
     _pegeDef.onLoad && _pegeDef.onLoad.apply(this, ...options)
   }
 })

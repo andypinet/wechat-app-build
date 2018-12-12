@@ -8,6 +8,9 @@
 <script>
   export default {
     data() {
+    },
+    onLoad() {
+      console.d(this)
     }
   }
 </script>
