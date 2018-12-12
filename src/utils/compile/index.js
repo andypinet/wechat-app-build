@@ -9,6 +9,10 @@ const flyio = new Flyio()
 
 import {Request} from 'wepyk-api/lib/utils'
 
+export function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 class CommonRequest extends Request {
   constructor(...args) {
     super(...args)
@@ -121,3 +125,5 @@ _reg.isPhone = function (message = 'invalid phone') {
 }
 
 export let reg = _reg
+
+

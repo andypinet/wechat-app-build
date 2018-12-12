@@ -41,6 +41,13 @@ Component({
       }
     }
     this.$emit = this.triggerEvent
+    this.$back = function(p = {}) {
+      if (globalUtils.isNumeric(p)) {
+         p = { delta: p }
+      }
+      if (!p.delta) { p.delta = 1 }
+      return wx.navigateBack(p)
+    }
     component.attached && component.attached.apply(this, ...args)
   }
 })
