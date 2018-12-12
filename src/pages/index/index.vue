@@ -1,6 +1,14 @@
 <template>
+  <import src="../../static/test.wxml" />
+  <template name="test-template">
+    template 内容
+  </template>
   <div>
     <view>测试文</view>
+    <div>
+      <template is="test-template"></template>
+      <template is="outer-test"></template>
+    </div>
     <div>
       <navigator url="/pages/scroll/index">IntersectionObserver</navigator>
       <navigator url="/pages/custom-navigation-bar/index">custom-navigation-bar</navigator>
